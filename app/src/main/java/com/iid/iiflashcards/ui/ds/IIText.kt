@@ -3,6 +3,7 @@ package com.iid.iiflashcards.ui.ds
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun IIText(text: String, style: IITextStyle) {
@@ -13,6 +14,7 @@ fun IIText(text: String, style: IITextStyle) {
     Text(
         text = text,
         style = style,
+        textAlign = TextAlign.Center
     )
 }
 

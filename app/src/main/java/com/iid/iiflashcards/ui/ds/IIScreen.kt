@@ -5,17 +5,20 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.iid.iiflashcards.ui.theme.IIFlashCardsTheme
 
 @Composable
 fun IIScreen(modifier: Modifier = Modifier, content: @Composable (Modifier) -> Unit) {
-    Scaffold(
-        modifier = modifier,
-        topBar = { },
-        bottomBar = { },
-        snackbarHost = { },
-        floatingActionButton = { },
-        floatingActionButtonPosition = FabPosition.Center,
-    ) { contentPadding ->
-        content(Modifier.padding(paddingValues = contentPadding))
+    IIFlashCardsTheme {
+        Scaffold(
+            modifier = modifier,
+            topBar = { },
+            bottomBar = { },
+            snackbarHost = { },
+            floatingActionButton = { },
+            floatingActionButtonPosition = FabPosition.Center,
+        ) { contentPadding ->
+            content(Modifier.padding(paddingValues = contentPadding))
+        }
     }
 }

@@ -1,7 +1,6 @@
 package com.iid.iiflashcards.ui.ds
 
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -9,7 +8,11 @@ import androidx.compose.runtime.Composable
 
 
 @Composable
-fun IIButton(text: String, style: IIButtonStyle = IIButtonStyle.Primary, onClick: () -> Unit) {
+fun IIButton(
+    text: String,
+    style: IIButtonStyle = IIButtonStyle.Primary,
+    onClick: () -> Unit
+) {
 
     val buttonColors = when (style) {
         is IIButtonStyle.Primary -> ButtonDefaults.buttonColors(
