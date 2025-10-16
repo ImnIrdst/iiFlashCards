@@ -17,9 +17,9 @@ import com.iid.iiflashcards.ui.ds.IITextStyle
 
 @Composable
 fun HomeScreen(navigateTo: (NavDestination) -> Unit = {}) {
-    IIScreen { modifier ->
+    IIScreen {
         Column(
-            modifier = modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
