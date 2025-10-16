@@ -36,16 +36,15 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iid.iiflashcards.ui.ds.Emphasis
 import com.iid.iiflashcards.ui.ds.IIScreen
 import com.iid.iiflashcards.ui.ds.IIText
@@ -53,15 +52,15 @@ import com.iid.iiflashcards.ui.ds.Style
 import com.iid.iiflashcards.ui.theme.IIFlashCardsTheme
 
 @Composable
-fun DeckReviewScreen() {
-    var isExpanded by remember { mutableStateOf(true) }
+fun DeckReviewScreen(viewModel: DeckReviewViewModel = viewModel()) {
+    val uiState by viewModel.uiState.collectAsState()
 
     IIScreen(
         topBar = { DeckDetailTopAppBar() },
         floatingActionButton = {
             DeckDetailFab(
-                isExpanded = isExpanded,
-                onReveal = { isExpanded = !isExpanded },
+                isExpanded = uiState.isCardExpanded,
+                onEvent = viewModel::onEvent,
             )
         },
         floatingActionButtonPosition = FabPosition.Center
@@ -74,7 +73,7 @@ fun DeckReviewScreen() {
             Spacer(modifier = Modifier.height(16.dp))
             DeckStats()
             Spacer(modifier = Modifier.height(24.dp))
-            Flashcard(isExpanded)
+            Flashcard(uiState)
         }
     }
 }
@@ -158,7 +157,7 @@ fun StatItem(count: Int, label: String, color: Color) {
 }
 
 @Composable
-fun Flashcard(isExpanded: Boolean) {
+fun Flashcard(state: UIState) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
@@ -210,7 +209,7 @@ fun Flashcard(isExpanded: Boolean) {
                 }
             }
             AnimatedVisibility(
-                visible = isExpanded,
+                visible = state.isCardExpanded,
                 enter = expandVertically(
                     expandFrom = Alignment.Top,
                     animationSpec = tween()
@@ -240,7 +239,7 @@ fun Flashcard(isExpanded: Boolean) {
 @Composable
 fun DeckDetailFab(
     isExpanded: Boolean,
-    onReveal: () -> Unit,
+    onEvent: (Event) -> Unit,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -254,7 +253,7 @@ fun DeckDetailFab(
             Icon(imageVector = Icons.Default.FavoriteBorder, contentDescription = "difficult")
         }
         FloatingActionButton(
-            onClick = onReveal,
+            onClick = { onEvent(Event.OnReveal) },
             shape = RoundedCornerShape(24.dp),
             modifier = Modifier.size(72.dp),
             elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 4.dp)
