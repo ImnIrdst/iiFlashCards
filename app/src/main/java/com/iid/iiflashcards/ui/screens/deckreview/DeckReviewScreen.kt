@@ -158,6 +158,7 @@ fun StatItem(count: Int, label: String, color: Color) {
 
 @Composable
 fun Flashcard(state: UIState) {
+    val card = state.currentCard
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
@@ -180,12 +181,12 @@ fun Flashcard(state: UIState) {
                 ) {
                     Column {
                         IIText(
-                            text = "institute",
+                            text = card.front,
                             style = Style.HeadlineMedium,
                             fontWeight = FontWeight.Bold
                         )
                         IIText(
-                            text = "'ɪn.stɪ.tfuːt",
+                            text = card.frontHint,
                             style = Style.BodyLarge,
                             emphasis = Emphasis.Medium,
                         )
@@ -221,12 +222,12 @@ fun Flashcard(state: UIState) {
             ) {
                 Column(modifier = Modifier.padding(24.dp)) {
                     IIText(
-                        "noun [ C ]: an organization whose purpose is to advance the study of a particular subject.",
+                        text = card.back,
                         style = Style.BodyLarge
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     IIText(
-                        "The National Institutes of Health fund medical research in many areas.",
+                        text = card.backHint,
                         style = Style.BodyMedium,
                         emphasis = Emphasis.Medium
                     )
