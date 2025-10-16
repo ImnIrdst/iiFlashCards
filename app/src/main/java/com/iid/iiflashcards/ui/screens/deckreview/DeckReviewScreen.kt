@@ -21,9 +21,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.ThumbUp
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.FabPosition
@@ -59,6 +60,7 @@ fun DeckReviewScreen() {
         topBar = { DeckDetailTopAppBar() },
         floatingActionButton = {
             DeckDetailFab(
+                isExpanded = isExpanded,
                 onReveal = { isExpanded = !isExpanded },
             )
         },
@@ -97,7 +99,7 @@ fun DeckDetailTopAppBar() {
             )
             Spacer(modifier = Modifier.height(4.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                IIText("55 words", style = Style.BodySmall, emphasis = Emphasis.Medium)
+                IIText(text = "55 words", style = Style.BodySmall, emphasis = Emphasis.Medium)
                 Spacer(modifier = Modifier.width(8.dp))
                 LinearProgressIndicator(
                     progress = { 0.2f },
@@ -237,7 +239,8 @@ fun Flashcard(isExpanded: Boolean) {
 
 @Composable
 fun DeckDetailFab(
-    onReveal: () -> Unit
+    isExpanded: Boolean,
+    onReveal: () -> Unit,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -248,7 +251,7 @@ fun DeckDetailFab(
             shape = RoundedCornerShape(16.dp),
             elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 4.dp)
         ) {
-            Icon(Icons.Default.FavoriteBorder, contentDescription = "difficult")
+            Icon(imageVector = Icons.Default.FavoriteBorder, contentDescription = "difficult")
         }
         FloatingActionButton(
             onClick = onReveal,
@@ -256,7 +259,12 @@ fun DeckDetailFab(
             modifier = Modifier.size(72.dp),
             elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 4.dp)
         ) {
-            Icon(Icons.Default.Add, contentDescription = "reveal")
+            val icon = if (isExpanded) {
+                Icons.Default.VisibilityOff
+            } else {
+                Icons.Default.Visibility
+            }
+            Icon(imageVector = icon, contentDescription = "reveal")
         }
         FloatingActionButton(
             onClick = { /*TODO*/ },

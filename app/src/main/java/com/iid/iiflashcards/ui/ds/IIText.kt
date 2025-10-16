@@ -56,9 +56,9 @@ sealed class Style {
 
 @Composable
 fun IIText(
-    modifier: Modifier = Modifier,
     text: String,
     style: Style,
+    modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.onBackground,
     emphasis: Emphasis = Emphasis.High,
     fontWeight: FontWeight = FontWeight.Normal
