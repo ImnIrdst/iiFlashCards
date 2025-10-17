@@ -21,8 +21,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.rounded.Person
@@ -45,22 +45,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.iid.iiflashcards.navigation.NavEvent
 import com.iid.iiflashcards.ui.ds.Emphasis
 import com.iid.iiflashcards.ui.ds.IIScreen
 import com.iid.iiflashcards.ui.ds.IIText
-import com.iid.iiflashcards.ui.ds.Style
+import com.iid.iiflashcards.ui.ds.IITextStyle
 import com.iid.iiflashcards.ui.theme.IIFlashCardsTheme
 
 @Composable
-fun DeckReviewScreen(viewModel: DeckReviewViewModel = viewModel()) {
+fun DeckReviewScreen(
+    viewModel: DeckReviewViewModel = viewModel(),
+    onNavEvent: (NavEvent) -> Unit = {},
+) {
     val uiState by viewModel.uiState.collectAsState()
 
     IIScreen(
-        topBar = { DeckDetailTopAppBar() },
+        topBar = { DeckDetailTopAppBar(onBack = { onNavEvent(NavEvent.PopBackStack) }) },
         floatingActionButton = {
             DeckDetailFab(
                 isExpanded = uiState.isCardExpanded,
                 onEvent = viewModel::onEvent,
+                onNavEvent = onNavEvent
             )
         },
         floatingActionButtonPosition = FabPosition.Center
@@ -79,26 +84,26 @@ fun DeckReviewScreen(viewModel: DeckReviewViewModel = viewModel()) {
 }
 
 @Composable
-fun DeckDetailTopAppBar() {
+fun DeckDetailTopAppBar(onBack: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = { /* TODO: handle back */ }) {
+        IconButton(onClick = onBack) {
             Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
         }
         Spacer(Modifier.width(8.dp))
         Column(modifier = Modifier.weight(1f)) {
             IIText(
                 text = "Common Words",
-                style = Style.HeadlineMedium,
+                style = IITextStyle.HeadlineMedium,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(4.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                IIText(text = "55 words", style = Style.BodySmall, emphasis = Emphasis.Medium)
+                IIText(text = "55 words", style = IITextStyle.BodySmall, emphasis = Emphasis.Medium)
                 Spacer(modifier = Modifier.width(8.dp))
                 LinearProgressIndicator(
                     progress = { 0.2f },
@@ -146,11 +151,11 @@ fun StatItem(count: Int, label: String, color: Color) {
                     .background(color, CircleShape)
             )
             Spacer(modifier = Modifier.width(4.dp))
-            IIText(label, style = Style.BodySmall, emphasis = Emphasis.Medium)
+            IIText(label, style = IITextStyle.BodySmall, emphasis = Emphasis.Medium)
         }
         IIText(
             count.toString(),
-            style = Style.HeadlineMedium,
+            style = IITextStyle.HeadlineMedium,
             fontWeight = FontWeight.Bold
         )
     }
@@ -182,12 +187,12 @@ fun Flashcard(state: UIState) {
                     Column {
                         IIText(
                             text = card.front,
-                            style = Style.HeadlineMedium,
+                            style = IITextStyle.HeadlineMedium,
                             fontWeight = FontWeight.Bold
                         )
                         IIText(
                             text = card.frontHint,
-                            style = Style.BodyLarge,
+                            style = IITextStyle.BodyLarge,
                             emphasis = Emphasis.Medium,
                         )
                     }
@@ -223,12 +228,12 @@ fun Flashcard(state: UIState) {
                 Column(modifier = Modifier.padding(24.dp)) {
                     IIText(
                         text = card.back,
-                        style = Style.BodyLarge
+                        style = IITextStyle.BodyLarge
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     IIText(
                         text = card.backHint,
-                        style = Style.BodyMedium,
+                        style = IITextStyle.BodyMedium,
                         emphasis = Emphasis.Medium
                     )
                 }
@@ -241,6 +246,7 @@ fun Flashcard(state: UIState) {
 fun DeckDetailFab(
     isExpanded: Boolean,
     onEvent: (Event) -> Unit,
+    onNavEvent: (NavEvent) -> Unit
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -267,11 +273,11 @@ fun DeckDetailFab(
             Icon(imageVector = icon, contentDescription = "reveal")
         }
         FloatingActionButton(
-            onClick = { /*TODO*/ },
+            onClick = { onNavEvent(NavEvent.AddCard) },
             shape = RoundedCornerShape(16.dp),
             elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 4.dp)
         ) {
-            Icon(imageVector = Icons.Default.ThumbUp, contentDescription = "learned")
+            Icon(imageVector = Icons.Default.Add, contentDescription = "Add Card")
         }
     }
 }

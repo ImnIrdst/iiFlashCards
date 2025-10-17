@@ -13,64 +13,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.iid.iiflashcards.ui.theme.IIFlashCardsTheme
 
 @Composable
-fun IIText(text: String, style: IITextStyle) {
-    val style = when (style) {
-        IITextStyle.DisplayLarge -> MaterialTheme.typography.displayLarge
-    }
-
-    Text(
-        text = text,
-        style = style,
-        textAlign = TextAlign.Center
-    )
-}
-
-sealed class IITextStyle {
-    object DisplayLarge : IITextStyle()
-}
-
-sealed class Emphasis(
-    val alpha: Float
-) {
-    object High : Emphasis(0.87f)
-    object Medium : Emphasis(0.6f)
-    object Disabled : Emphasis(0.38f)
-}
-
-sealed class Style {
-    object HeadlineLarge : Style()
-    object TitleLarge : Style()
-    object BodyLarge : Style()
-    object BodyMedium : Style()
-    object BodySmall : Style()
-    object HeadlineMedium : Style()
-    object LabelLarge : Style()
-}
-
-
-@Composable
 fun IIText(
     text: String,
-    style: Style,
+    style: IITextStyle,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.onBackground,
     emphasis: Emphasis = Emphasis.High,
     fontWeight: FontWeight = FontWeight.Normal
 ) {
     val style = when (style) {
-        Style.HeadlineLarge -> MaterialTheme.typography.headlineLarge
-        Style.TitleLarge -> MaterialTheme.typography.titleLarge
-        Style.BodyLarge -> MaterialTheme.typography.bodyLarge
-        Style.BodyMedium -> MaterialTheme.typography.bodyMedium
-        Style.BodySmall -> MaterialTheme.typography.bodySmall
-        Style.HeadlineMedium -> MaterialTheme.typography.headlineMedium
-        Style.LabelLarge -> MaterialTheme.typography.labelLarge
+        IITextStyle.DisplayLarge -> MaterialTheme.typography.displayLarge
+        IITextStyle.HeadlineLarge -> MaterialTheme.typography.headlineLarge
+        IITextStyle.HeadlineMedium -> MaterialTheme.typography.headlineMedium
+        IITextStyle.HeadlineSmall -> MaterialTheme.typography.headlineSmall
+        IITextStyle.TitleLarge -> MaterialTheme.typography.titleLarge
+        IITextStyle.BodyLarge -> MaterialTheme.typography.bodyLarge
+        IITextStyle.BodyMedium -> MaterialTheme.typography.bodyMedium
+        IITextStyle.BodySmall -> MaterialTheme.typography.bodySmall
+        IITextStyle.LabelLarge -> MaterialTheme.typography.labelLarge
     }
 
     Text(
@@ -81,6 +46,26 @@ fun IIText(
     )
 }
 
+
+sealed class Emphasis(
+    val alpha: Float
+) {
+    data object High : Emphasis(0.87f)
+    data object Medium : Emphasis(0.6f)
+    data object Disabled : Emphasis(0.38f)
+}
+
+sealed class IITextStyle {
+    data object DisplayLarge : IITextStyle()
+    data object HeadlineLarge : IITextStyle()
+    data object TitleLarge : IITextStyle()
+    data object BodyLarge : IITextStyle()
+    data object BodyMedium : IITextStyle()
+    data object BodySmall : IITextStyle()
+    data object HeadlineMedium : IITextStyle()
+    data object LabelLarge : IITextStyle()
+    data object HeadlineSmall : IITextStyle()
+}
 
 @Preview(heightDp = 1024, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
@@ -93,20 +78,22 @@ private fun Preview() {
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                PreviewGroup(Style.HeadlineLarge, false)
-                PreviewGroup(Style.HeadlineMedium, false)
-                PreviewGroup(Style.TitleLarge)
-                PreviewGroup(Style.BodyLarge)
-                PreviewGroup(Style.BodyMedium)
-                PreviewGroup(Style.BodySmall)
-                PreviewGroup(Style.LabelLarge)
+                PreviewGroup(IITextStyle.DisplayLarge, false)
+                PreviewGroup(IITextStyle.HeadlineLarge, false)
+                PreviewGroup(IITextStyle.HeadlineMedium, false)
+                PreviewGroup(IITextStyle.HeadlineSmall, false)
+                PreviewGroup(IITextStyle.TitleLarge)
+                PreviewGroup(IITextStyle.BodyLarge)
+                PreviewGroup(IITextStyle.BodyMedium)
+                PreviewGroup(IITextStyle.BodySmall)
+                PreviewGroup(IITextStyle.LabelLarge)
             }
         }
     }
 }
 
 @Composable
-private fun PreviewGroup(style: Style, hideOtherStyles: Boolean = true) {
+private fun PreviewGroup(style: IITextStyle, hideOtherStyles: Boolean = true) {
     Column {
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
