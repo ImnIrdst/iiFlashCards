@@ -9,13 +9,17 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.iid.iiflashcards.navigation.AppNavigation
 import com.iid.iiflashcards.ui.screens.home.HomeScreen
 import com.iid.iiflashcards.ui.theme.IIFlashCardsTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            AppNavigation()
+            IIFlashCardsTheme {
+                AppNavigation()
+            }
         }
     }
 }
