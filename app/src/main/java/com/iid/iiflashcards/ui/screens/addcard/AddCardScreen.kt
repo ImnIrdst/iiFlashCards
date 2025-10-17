@@ -14,14 +14,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iid.iiflashcards.navigation.NavEvent
 import com.iid.iiflashcards.ui.ds.IIScreen
 import com.iid.iiflashcards.ui.ds.IIText
@@ -29,45 +28,42 @@ import com.iid.iiflashcards.ui.ds.IITextStyle
 import com.iid.iiflashcards.ui.theme.IIFlashCardsTheme
 
 @Composable
-fun AddCardScreen(onNavEvent: (NavEvent) -> Unit = {}) {
-    var front by remember { mutableStateOf("") }
-    var frontHint by remember { mutableStateOf("") }
-    var back by remember { mutableStateOf("") }
-    var backHint by remember { mutableStateOf("") }
+fun AddCardScreen(
+    viewModel: AddCardViewModel = viewModel(),
+    onNavEvent: (NavEvent) -> Unit = {}
+) {
+    val uiState by viewModel.uiState.collectAsState()
 
     IIScreen(
         topBar = {
             AddCardTopAppBar(onNavEvent)
         }
     ) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-        ) {
+        Column(modifier = Modifier.padding(16.dp)) {
             OutlinedTextField(
-                value = front,
-                onValueChange = { front = it },
+                value = uiState.front,
+                onValueChange = { viewModel.onEvent(AddCardEvent.OnFrontChange(it)) },
                 label = { Text("Front") },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
-                value = frontHint,
-                onValueChange = { frontHint = it },
+                value = uiState.frontHint,
+                onValueChange = { viewModel.onEvent(AddCardEvent.OnFrontHintChange(it)) },
                 label = { Text("Front Hint (optional)") },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(16.dp))
             OutlinedTextField(
-                value = back,
-                onValueChange = { back = it },
+                value = uiState.back,
+                onValueChange = { viewModel.onEvent(AddCardEvent.OnBackChange(it)) },
                 label = { Text("Back") },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
-                value = backHint,
-                onValueChange = { backHint = it },
+                value = uiState.backHint,
+                onValueChange = { viewModel.onEvent(AddCardEvent.OnBackHintChange(it)) },
                 label = { Text("Back Hint (optional)") },
                 modifier = Modifier.fillMaxWidth()
             )
