@@ -87,7 +87,7 @@ fun DeckReviewScreenContent(
             Spacer(modifier = Modifier.height(16.dp))
             DeckStats()
             Spacer(modifier = Modifier.height(24.dp))
-            Flashcard(uiState)
+            Flashcard(uiState, onEvent)
         }
     }
 }
@@ -171,7 +171,7 @@ fun StatItem(count: Int, label: String, color: Color) {
 }
 
 @Composable
-fun Flashcard(state: UIState) {
+fun Flashcard(state: UIState, onEvent: (Event) -> Unit) {
     val card = state.currentCard ?: return
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -245,6 +245,21 @@ fun Flashcard(state: UIState) {
                         style = IITextStyle.BodyMedium,
                         emphasis = Emphasis.Medium
                     )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        FloatingActionButton(
+                            onClick = {
+                                onEvent(Event.OnEasy)
+                            },
+                            shape = RoundedCornerShape(24.dp),
+                            modifier = Modifier.size(72.dp),
+                            elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 4.dp)
+                        ) {
+                            IIText("Easy", style = IITextStyle.LabelLarge)
+                        }
+                    }
                 }
             }
         }

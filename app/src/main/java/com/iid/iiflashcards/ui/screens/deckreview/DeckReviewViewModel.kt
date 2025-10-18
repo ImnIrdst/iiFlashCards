@@ -36,7 +36,13 @@ class DeckReviewViewModel @Inject constructor(
     fun onEvent(event: Event) {
         when (event) {
             is Event.OnReveal -> onReveal()
+            is Event.OnEasy -> onEasy()
         }
+    }
+
+    private fun onEasy() {
+        _uiState.value =
+            _uiState.value.copy(cardIndex = _uiState.value.cardIndex + 1)
     }
 
     private fun onReveal() {
@@ -46,6 +52,7 @@ class DeckReviewViewModel @Inject constructor(
 
 sealed class Event {
     data object OnReveal : Event()
+    data object OnEasy : Event()
 }
 
 data class UIState(
