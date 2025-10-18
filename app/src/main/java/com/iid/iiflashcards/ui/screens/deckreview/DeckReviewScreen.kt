@@ -240,32 +240,36 @@ fun Flashcard(state: UIState, onEvent: (Event) -> Unit) {
                     animationSpec = tween()
                 )
             ) {
-                Column(modifier = Modifier.padding(24.dp)) {
-                    IIText(
-                        text = card.back,
-                        style = IITextStyle.BodyLarge
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    IIText(
-                        text = card.backHint,
-                        style = IITextStyle.BodyMedium,
-                        emphasis = Emphasis.Medium
-                    )
+                Column {
+                    Column(modifier = Modifier.padding(24.dp)) {
+                        IIText(
+                            text = card.back,
+                            style = IITextStyle.BodyLarge
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        IIText(
+                            text = card.backHint,
+                            style = IITextStyle.BodyMedium,
+                            emphasis = Emphasis.Medium
+                        )
+                    }
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(
-                            space = 16.dp,
+                            space = 8.dp,
                             alignment = Alignment.CenterHorizontally
                         ),
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 16.dp)
+                            .padding(vertical = 16.dp)
                     ) {
-                        IIButton(text = "Easy") { onEvent(Event.OnEasy) }
-                        IIButton(text = "Medium") { onEvent(Event.OnEasy) }
-                        IIButton(text = "Hard") { onEvent(Event.OnEasy) }
+                        IIButton(text = "Again", subText = "1m") { onEvent(Event.OnEasy) }
+                        IIButton(text = "Hard", subText = "10m") { onEvent(Event.OnEasy) }
+                        IIButton(text = "Good", subText = "1d") { onEvent(Event.OnEasy) }
+                        IIButton(text = "Easy", subText = "4d") { onEvent(Event.OnEasy) }
                     }
                 }
+
             }
         }
     }
