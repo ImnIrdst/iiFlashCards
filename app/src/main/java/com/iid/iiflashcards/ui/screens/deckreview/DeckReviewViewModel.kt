@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DeckReviewViewModel @Inject constructor(
-    private val cardRepository: CardRepository
+    cardRepository: CardRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UIState())
