@@ -3,12 +3,15 @@ package com.iid.iiflashcards.ui.theme
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
@@ -244,6 +247,144 @@ private val highContrastDarkColorScheme = darkColorScheme(
     surfaceContainerHighest = surfaceContainerHighestDarkHighContrast,
 )
 
+val extendedLight = ExtendedColorScheme(
+    warning = ColorFamily(
+        warningLight,
+        onWarningLight,
+        warningContainerLight,
+        onWarningContainerLight,
+    ),
+    info = ColorFamily(
+        infoLight,
+        onInfoLight,
+        infoContainerLight,
+        onInfoContainerLight,
+    ),
+    success = ColorFamily(
+        successLight,
+        onSuccessLight,
+        successContainerLight,
+        onSuccessContainerLight,
+    ),
+)
+
+@Suppress("unused")
+val extendedDark = ExtendedColorScheme(
+    warning = ColorFamily(
+        warningDark,
+        onWarningDark,
+        warningContainerDark,
+        onWarningContainerDark,
+    ),
+    info = ColorFamily(
+        infoDark,
+        onInfoDark,
+        infoContainerDark,
+        onInfoContainerDark,
+    ),
+    success = ColorFamily(
+        successDark,
+        onSuccessDark,
+        successContainerDark,
+        onSuccessContainerDark,
+    ),
+)
+
+@Suppress("unused")
+val extendedLightMediumContrast = ExtendedColorScheme(
+    warning = ColorFamily(
+        warningLightMediumContrast,
+        onWarningLightMediumContrast,
+        warningContainerLightMediumContrast,
+        onWarningContainerLightMediumContrast,
+    ),
+    info = ColorFamily(
+        infoLightMediumContrast,
+        onInfoLightMediumContrast,
+        infoContainerLightMediumContrast,
+        onInfoContainerLightMediumContrast,
+    ),
+    success = ColorFamily(
+        successLightMediumContrast,
+        onSuccessLightMediumContrast,
+        successContainerLightMediumContrast,
+        onSuccessContainerLightMediumContrast,
+    ),
+)
+
+@Suppress("unused")
+val extendedLightHighContrast = ExtendedColorScheme(
+    warning = ColorFamily(
+        warningLightHighContrast,
+        onWarningLightHighContrast,
+        warningContainerLightHighContrast,
+        onWarningContainerLightHighContrast,
+    ),
+    info = ColorFamily(
+        infoLightHighContrast,
+        onInfoLightHighContrast,
+        infoContainerLightHighContrast,
+        onInfoContainerLightHighContrast,
+    ),
+    success = ColorFamily(
+        successLightHighContrast,
+        onSuccessLightHighContrast,
+        successContainerLightHighContrast,
+        onSuccessContainerLightHighContrast,
+    ),
+)
+
+@Suppress("unused")
+val extendedDarkMediumContrast = ExtendedColorScheme(
+    warning = ColorFamily(
+        warningDarkMediumContrast,
+        onWarningDarkMediumContrast,
+        warningContainerDarkMediumContrast,
+        onWarningContainerDarkMediumContrast,
+    ),
+    info = ColorFamily(
+        infoDarkMediumContrast,
+        onInfoDarkMediumContrast,
+        infoContainerDarkMediumContrast,
+        onInfoContainerDarkMediumContrast,
+    ),
+    success = ColorFamily(
+        successDarkMediumContrast,
+        onSuccessDarkMediumContrast,
+        successContainerDarkMediumContrast,
+        onSuccessContainerDarkMediumContrast,
+    ),
+)
+
+@Suppress("unused")
+val extendedDarkHighContrast = ExtendedColorScheme(
+    warning = ColorFamily(
+        warningDarkHighContrast,
+        onWarningDarkHighContrast,
+        warningContainerDarkHighContrast,
+        onWarningContainerDarkHighContrast,
+    ),
+    info = ColorFamily(
+        infoDarkHighContrast,
+        onInfoDarkHighContrast,
+        infoContainerDarkHighContrast,
+        onInfoContainerDarkHighContrast,
+    ),
+    success = ColorFamily(
+        successDarkHighContrast,
+        onSuccessDarkHighContrast,
+        successContainerDarkHighContrast,
+        onSuccessContainerDarkHighContrast,
+    ),
+)
+
+@Immutable
+data class ExtendedColorScheme(
+    val warning: ColorFamily,
+    val info: ColorFamily,
+    val success: ColorFamily,
+)
+
 @Immutable
 data class ColorFamily(
     val color: Color,
@@ -252,10 +393,25 @@ data class ColorFamily(
     val onColorContainer: Color
 )
 
-@Suppress("unused")
-val unspecified_scheme = ColorFamily(
+val unspecifiedScheme = ColorFamily(
     Color.Unspecified, Color.Unspecified, Color.Unspecified, Color.Unspecified
 )
+
+
+val LocalExtendedColorScheme = staticCompositionLocalOf {
+    ExtendedColorScheme(
+        unspecifiedScheme,
+        unspecifiedScheme,
+        unspecifiedScheme,
+    )
+}
+
+
+@Suppress("UnusedReceiverParameter")
+val MaterialTheme.extendedColorScheme: ExtendedColorScheme
+    @Composable
+    @ReadOnlyComposable
+    get() = LocalExtendedColorScheme.current
 
 @Composable
 fun IIFlashCardsTheme(
@@ -274,9 +430,11 @@ fun IIFlashCardsTheme(
         else -> lightScheme
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = AppTypography,
-        content = content
-    )
+    CompositionLocalProvider(LocalExtendedColorScheme provides extendedLight) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = AppTypography,
+            content = content
+        )
+    }
 }

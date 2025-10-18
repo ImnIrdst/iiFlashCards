@@ -47,7 +47,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.iid.iiflashcards.navigation.NavEvent
 import com.iid.iiflashcards.ui.ds.Emphasis
-import com.iid.iiflashcards.ui.ds.IIButton
+import com.iid.iiflashcards.ui.ds.IIButtonOutLinedStyle.Success
+import com.iid.iiflashcards.ui.ds.IIButtonOutLinedStyle.Info
+import com.iid.iiflashcards.ui.ds.IIButtonOutLinedStyle.Warning
+import com.iid.iiflashcards.ui.ds.IIButtonOutLinedStyle.Error
+import com.iid.iiflashcards.ui.ds.IIButtonOutlined
 import com.iid.iiflashcards.ui.ds.IIScreen
 import com.iid.iiflashcards.ui.ds.IIText
 import com.iid.iiflashcards.ui.ds.IITextStyle
@@ -263,10 +267,18 @@ fun Flashcard(state: UIState, onEvent: (Event) -> Unit) {
                             .fillMaxWidth()
                             .padding(vertical = 16.dp)
                     ) {
-                        IIButton(text = "Again", subText = "1m") { onEvent(Event.OnEasy) }
-                        IIButton(text = "Hard", subText = "10m") { onEvent(Event.OnEasy) }
-                        IIButton(text = "Good", subText = "1d") { onEvent(Event.OnEasy) }
-                        IIButton(text = "Easy", subText = "4d") { onEvent(Event.OnEasy) }
+                        IIButtonOutlined(text = "Again", subText = "1m", style = Error) {
+                            onEvent(Event.OnEasy)
+                        }
+                        IIButtonOutlined(text = "Hard", subText = "10m", style = Warning) {
+                            onEvent(Event.OnEasy)
+                        }
+                        IIButtonOutlined(text = "Good", subText = "1d", style = Info) {
+                            onEvent(Event.OnEasy)
+                        }
+                        IIButtonOutlined(text = "Easy", subText = "4d", style = Success) {
+                            onEvent(Event.OnEasy)
+                        }
                     }
                 }
 
