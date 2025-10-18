@@ -82,3 +82,6 @@ val UIState.currentCard: UIState.Card?
     get() = cards.getOrNull(cardIndex)
 val UIState.isCardExpanded: Boolean
     get() = cards.getOrNull(cardIndex)?.isExpanded ?: true
+
+val UIState.progress: Float
+    get() = if (cards.isEmpty()) 0f else (cardIndex / cards.size.toFloat())

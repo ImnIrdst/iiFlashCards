@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.iid.iiflashcards.navigation.NavEvent
 import com.iid.iiflashcards.ui.ds.Emphasis
+import com.iid.iiflashcards.ui.ds.IIButton
 import com.iid.iiflashcards.ui.ds.IIScreen
 import com.iid.iiflashcards.ui.ds.IIText
 import com.iid.iiflashcards.ui.ds.IITextStyle
@@ -69,7 +70,7 @@ fun DeckReviewScreenContent(
     onNavEvent: (NavEvent) -> Unit = {},
 ) {
     IIScreen(
-        topBar = { DeckDetailTopAppBar(onBack = { onNavEvent(NavEvent.PopBackStack) }) },
+        topBar = { DeckDetailTopAppBar(uiState, onBack = { onNavEvent(NavEvent.PopBackStack) }) },
         floatingActionButton = {
             DeckDetailFab(
                 isExpanded = uiState.isCardExpanded,
@@ -93,7 +94,8 @@ fun DeckReviewScreenContent(
 }
 
 @Composable
-fun DeckDetailTopAppBar(onBack: () -> Unit) {
+fun DeckDetailTopAppBar(uiState: UIState, onBack: () -> Unit) {
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -112,10 +114,14 @@ fun DeckDetailTopAppBar(onBack: () -> Unit) {
             )
             Spacer(modifier = Modifier.height(4.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                IIText(text = "55 words", style = IITextStyle.BodySmall, emphasis = Emphasis.Medium)
+                IIText(
+                    text = "${uiState.cards.size} words",
+                    style = IITextStyle.BodySmall,
+                    emphasis = Emphasis.Medium
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 LinearProgressIndicator(
-                    progress = { 0.2f },
+                    progress = { uiState.progress },
                     gapSize = 0.dp,
                     drawStopIndicator = {},
                     modifier = Modifier.padding(2.dp)
@@ -246,19 +252,18 @@ fun Flashcard(state: UIState, onEvent: (Event) -> Unit) {
                         emphasis = Emphasis.Medium
                     )
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        horizontalArrangement = Arrangement.spacedBy(
+                            space = 16.dp,
+                            alignment = Alignment.CenterHorizontally
+                        ),
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp)
                     ) {
-                        FloatingActionButton(
-                            onClick = {
-                                onEvent(Event.OnEasy)
-                            },
-                            shape = RoundedCornerShape(24.dp),
-                            modifier = Modifier.size(72.dp),
-                            elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 4.dp)
-                        ) {
-                            IIText("Easy", style = IITextStyle.LabelLarge)
-                        }
+                        IIButton(text = "Easy") { onEvent(Event.OnEasy) }
+                        IIButton(text = "Medium") { onEvent(Event.OnEasy) }
+                        IIButton(text = "Hard") { onEvent(Event.OnEasy) }
                     }
                 }
             }
