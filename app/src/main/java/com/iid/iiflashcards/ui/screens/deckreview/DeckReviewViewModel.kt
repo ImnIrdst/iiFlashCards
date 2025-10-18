@@ -1,25 +1,36 @@
 package com.iid.iiflashcards.ui.screens.deckreview
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.iid.iiflashcards.data.repository.CardRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
-class DeckReviewViewModel : ViewModel() {
+@HiltViewModel
+class DeckReviewViewModel @Inject constructor(
+    private val cardRepository: CardRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UIState())
     val uiState: StateFlow<UIState> = _uiState
 
     init {
-        _uiState.value = UIState(
-            cards = listOf(
-                UIState.Card(
-                    front = "institute",
-                    frontHint = "'ɪn.stɪ.tfuːt",
-                    back = "noun [ C ]: an organization whose purpose is to advance the study of a particular subject.",
-                    backHint = "The National Institutes of Health fund medical research in many areas.",
-                )
+        cardRepository.getAllCards().onEach { cards ->
+            _uiState.value = UIState(
+                cards = cards.map {
+                    UIState.Card(
+                        front = it.front,
+                        frontHint = it.frontHint ?: "...",
+                        back = it.back,
+                        backHint = it.backHint ?: "...",
+                    )
+                }
             )
-        )
+        }.launchIn(viewModelScope)
     }
 
     fun onEvent(event: Event) {
@@ -60,7 +71,7 @@ fun UIState.toggleCardReveal() = copy(
     }
 )
 
-val UIState.currentCard: UIState.Card
-    get() = cards[cardIndex]
+val UIState.currentCard: UIState.Card?
+    get() = cards.getOrNull(cardIndex)
 val UIState.isCardExpanded: Boolean
-    get() = cards[cardIndex].isExpanded
+    get() = cards.getOrNull(cardIndex)?.isExpanded ?: true

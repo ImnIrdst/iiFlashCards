@@ -44,7 +44,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.iid.iiflashcards.navigation.NavEvent
 import com.iid.iiflashcards.ui.ds.Emphasis
 import com.iid.iiflashcards.ui.ds.IIScreen
@@ -54,7 +54,7 @@ import com.iid.iiflashcards.ui.theme.IIFlashCardsTheme
 
 @Composable
 fun DeckReviewScreen(
-    viewModel: DeckReviewViewModel = viewModel(),
+    viewModel: DeckReviewViewModel = hiltViewModel(),
     onNavEvent: (NavEvent) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -163,7 +163,7 @@ fun StatItem(count: Int, label: String, color: Color) {
 
 @Composable
 fun Flashcard(state: UIState) {
-    val card = state.currentCard
+    val card = state.currentCard ?: return
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),

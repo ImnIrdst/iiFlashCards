@@ -3,9 +3,11 @@ package com.iid.iiflashcards.data.repository
 import com.iid.iiflashcards.data.model.Card
 import com.iid.iiflashcards.data.model.CardDao
 import com.iid.iiflashcards.data.model.RemoteDataSource
+import kotlinx.coroutines.flow.Flow
 
 interface CardRepository {
     suspend fun saveCard(card: Card)
+    fun getAllCards(): Flow<List<Card>>
 }
 
 class CardRepositoryImpl(
@@ -17,4 +19,6 @@ class CardRepositoryImpl(
         cardDao.insertCard(card)
         remoteDataSource.saveCard(card)
     }
+
+    override fun getAllCards(): Flow<List<Card>> = cardDao.getAllCards()
 }
