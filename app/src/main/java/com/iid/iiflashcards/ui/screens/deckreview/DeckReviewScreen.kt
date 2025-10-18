@@ -44,7 +44,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.iid.iiflashcards.navigation.NavEvent
 import com.iid.iiflashcards.ui.ds.Emphasis
 import com.iid.iiflashcards.ui.ds.IIScreen
@@ -52,19 +52,28 @@ import com.iid.iiflashcards.ui.ds.IIText
 import com.iid.iiflashcards.ui.ds.IITextStyle
 import com.iid.iiflashcards.ui.theme.IIFlashCardsTheme
 
+
 @Composable
 fun DeckReviewScreen(
     viewModel: DeckReviewViewModel = hiltViewModel(),
     onNavEvent: (NavEvent) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    DeckReviewScreenContent(uiState, viewModel::onEvent, onNavEvent)
+}
 
+@Composable
+fun DeckReviewScreenContent(
+    uiState: UIState,
+    onEvent: (Event) -> Unit = {},
+    onNavEvent: (NavEvent) -> Unit = {},
+) {
     IIScreen(
         topBar = { DeckDetailTopAppBar(onBack = { onNavEvent(NavEvent.PopBackStack) }) },
         floatingActionButton = {
             DeckDetailFab(
                 isExpanded = uiState.isCardExpanded,
-                onEvent = viewModel::onEvent,
+                onEvent = onEvent,
                 onNavEvent = onNavEvent
             )
         },
@@ -286,6 +295,17 @@ fun DeckDetailFab(
 @Composable
 fun Preview() {
     IIFlashCardsTheme {
-        DeckReviewScreen()
+        DeckReviewScreenContent(
+            uiState = UIState(
+                cards = listOf(
+                    UIState.Card(
+                        front = "institute",
+                        frontHint = "'ɪn.stɪ.tfuːt",
+                        back = "noun [ C ]: an organization whose purpose is to advance the study of a particular subject.",
+                        backHint = "The National Institutes of Health fund medical research in many areas.",
+                    )
+                )
+            )
+        )
     }
 }

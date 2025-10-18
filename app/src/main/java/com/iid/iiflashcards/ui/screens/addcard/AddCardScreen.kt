@@ -20,7 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.iid.iiflashcards.navigation.NavEvent
 import com.iid.iiflashcards.ui.ds.IIScreen
 import com.iid.iiflashcards.ui.ds.IIText
@@ -30,40 +30,53 @@ import com.iid.iiflashcards.ui.theme.IIFlashCardsTheme
 @Composable
 fun AddCardScreen(
     viewModel: AddCardViewModel = hiltViewModel(),
-    onNavEvent: (NavEvent) -> Unit = {}
+    onNavEvent: (NavEvent) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
+    AddCardScreenContent(
+        uiState,
+        onEvent = viewModel::onEvent,
+        onNavEvent = onNavEvent
+    )
+}
+
+@Composable
+fun AddCardScreenContent(
+    uiState: AddCardUiState,
+    onEvent: (Event) -> Unit = {},
+    onNavEvent: (NavEvent) -> Unit = {}
+) {
     IIScreen(
         topBar = {
-            AddCardTopAppBar(onNavEvent, onEvent = viewModel::onEvent)
+            AddCardTopAppBar(onNavEvent, onEvent)
         }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             OutlinedTextField(
                 value = uiState.front,
-                onValueChange = { viewModel.onEvent(Event.OnFrontChange(it)) },
+                onValueChange = { onEvent(Event.OnFrontChange(it)) },
                 label = { Text("Front") },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = uiState.frontHint,
-                onValueChange = { viewModel.onEvent(Event.OnFrontHintChange(it)) },
+                onValueChange = { onEvent(Event.OnFrontHintChange(it)) },
                 label = { Text("Front Hint (optional)") },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(16.dp))
             OutlinedTextField(
                 value = uiState.back,
-                onValueChange = { viewModel.onEvent(Event.OnBackChange(it)) },
+                onValueChange = { onEvent(Event.OnBackChange(it)) },
                 label = { Text("Back") },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = uiState.backHint,
-                onValueChange = { viewModel.onEvent(Event.OnBackHintChange(it)) },
+                onValueChange = { onEvent(Event.OnBackHintChange(it)) },
                 label = { Text("Back Hint (optional)") },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -91,8 +104,7 @@ private fun AddCardTopAppBar(onNavEvent: (NavEvent) -> Unit, onEvent: (Event) ->
             onClick = {
                 onEvent(Event.OnSave)
                 onNavEvent(NavEvent.PopBackStack)
-            }
-        ) {
+            }) {
             Icon(imageVector = Icons.Default.Done, contentDescription = "Save")
         }
     }
@@ -102,6 +114,6 @@ private fun AddCardTopAppBar(onNavEvent: (NavEvent) -> Unit, onEvent: (Event) ->
 @Composable
 private fun PreviewAddCardScreen() {
     IIFlashCardsTheme {
-        AddCardScreen()
+        AddCardScreenContent(uiState = AddCardUiState())
     }
 }
