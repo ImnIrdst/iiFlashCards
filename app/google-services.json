@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "701117525566",
+    "project_id": "gen-lang-client-0838180159",
+    "storage_bucket": "gen-lang-client-0838180159.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:701117525566:android:cb6d261d193e719e956b6f",
+        "android_client_info": {
+          "package_name": "com.iid.iiflashcards"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAuI0IZLmA4zpR-cNmlqv5FJGwtW30iOI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
