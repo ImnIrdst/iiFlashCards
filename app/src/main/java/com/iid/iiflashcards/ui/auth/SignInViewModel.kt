@@ -19,6 +19,14 @@ class SignInViewModel : ViewModel() {
         }
     }
 
+    fun setSignedIn() {
+        _state.value = _state.value.copy(isSignInSuccessful = true)
+    }
+
+    fun setSignedOut() {
+        _state.value = _state.value.copy(isSignInSuccessful = false, signInError = "signInError")
+    }
+
     fun resetState() {
         _state.update { SignInState() }
     }

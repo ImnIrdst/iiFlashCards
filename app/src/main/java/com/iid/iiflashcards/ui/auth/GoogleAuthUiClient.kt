@@ -13,7 +13,6 @@ class GoogleAuthUiClient(
     private val context: Context,
     private val oneTapClient: SignInClient
 ) {
-
     private val R_string_web_client_id =
         "701117525566-6pp0sti98ba5fet1ulo8r75bmus23io9.apps.googleusercontent.com"
 
@@ -86,7 +85,9 @@ class GoogleAuthUiClient(
     }
 
     fun getSignedInUser(): UserData? {
+        println("IMN HERE 1")
         val credential = oneTapClient.getSignInCredentialFromIntent(Intent())
+        println("IMN HERE 2")
         val googleIdToken = credential.googleIdToken
         val googleId = googleIdToken?.let {
             val webClientId = R_string_web_client_id

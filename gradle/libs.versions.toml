@@ -2,7 +2,8 @@
 agp = "8.13.0"
 firebaseBom = "34.4.0"
 googleApiClientAndroid = "2.8.1"
-googleApiServicesSheets = "v4-rev516-1.23.0"
+googleApiServicesSheets = "v4-rev20220927-2.0.0"
+googleHttpClientJackson2 = "2.0.2"
 jjwt = "0.13.0"
 kotlin = "2.2.20"
 coreKtx = "1.17.0"
@@ -26,9 +27,11 @@ hiltNavigationCompose = "1.3.0"
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk" }
 google-api-client-android = { module = "com.google.api-client:google-api-client-android", version.ref = "googleApiClientAndroid" }
 google-api-services-sheets = { module = "com.google.apis:google-api-services-sheets", version.ref = "googleApiServicesSheets" }
+google-http-client-jackson2 = { module = "com.google.http-client:google-http-client-jackson2", version.ref = "googleHttpClientJackson2" }
 jjwt = { module = "io.jsonwebtoken:jjwt", version.ref = "jjwt" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

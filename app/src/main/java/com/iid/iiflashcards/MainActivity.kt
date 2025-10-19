@@ -44,13 +44,24 @@ class MainActivity : ComponentActivity() {
             IIFlashCardsTheme {
                 val state by viewModel.state.collectAsState()
 
+//                 Check for a signed-in user when the app starts
+                LaunchedEffect(key1 = Unit) {
+                    val signedInUser = googleAuthUiClient.getSignedInUser()
+                    if (signedInUser != null) {
+                        viewModel.setSignedIn()
+                    } else {
+                        viewModel.setSignedOut()
+                    }
+                }
+
                 val launcher = rememberLauncherForActivityResult(
                     contract = ActivityResultContracts.StartIntentSenderForResult(),
-                    onResult = {
-                        if (it.resultCode == RESULT_OK) {
+                    onResult = { result ->
+                        println("TODO imn result.resultCode ${result.resultCode}")
+                        if (result.resultCode == RESULT_OK) {
                             lifecycleScope.launch {
                                 val signInResult = googleAuthUiClient.signInWithIntent(
-                                    intent = it.data ?: return@launch
+                                    intent = result.data ?: return@launch
                                 )
                                 viewModel.onSignInResult(signInResult)
                             }
@@ -58,6 +69,7 @@ class MainActivity : ComponentActivity() {
                     }
                 )
 
+                // Show a toast message upon successful sign-in
                 LaunchedEffect(key1 = state.isSignInSuccessful) {
                     if (state.isSignInSuccessful) {
                         Toast.makeText(
@@ -65,28 +77,73 @@ class MainActivity : ComponentActivity() {
                             "Sign in successful",
                             Toast.LENGTH_LONG
                         ).show()
-
                         viewModel.resetState()
                     }
                 }
 
-                if (googleAuthUiClient.getSignedInUser() != null) {
-                    AppNavigation()
-                } else {
-                    SignInScreen(
-                        state = state,
-                        onSignInClick = {
-                            lifecycleScope.launch {
-                                val signInIntentSender = googleAuthUiClient.signIn()
-                                launcher.launch(
-                                    IntentSenderRequest.Builder(
-                                        signInIntentSender ?: return@launch
-                                    ).build()
-                                )
+                // Show UI based on the ViewModel's state, not a direct call
+                when {
+//                    state.isSignInSuccessful == false -> {
+//                        // Initial loading state
+//                        Box(
+//                            modifier = Modifier.fillMaxSize(),
+//                            contentAlignment = Alignment.Center
+//                        ) {
+//                            CircularProgressIndicator()
+//                        }
+//                    }
+                    state.isSignInSuccessful -> {
+                        // If sign-in is successful, show the main app
+                        AppNavigation()
+                    }
+
+                    else -> {
+                        // Otherwise, show the sign-in screen
+                        SignInScreen(
+                            state = state,
+                            onSignInClick = {
+                                lifecycleScope.launch {
+                                    val signInIntentSender = googleAuthUiClient.signIn()
+                                    println("TODO imn ${signInIntentSender}")
+                                    launcher.launch(
+                                        IntentSenderRequest.Builder(
+                                            signInIntentSender ?: return@launch
+                                        ).build()
+                                    )
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
+//                LaunchedEffect(key1 = state.isSignInSuccessful) {
+//                    if (state.isSignInSuccessful) {
+//                        Toast.makeText(
+//                            applicationContext,
+//                            "Sign in successful",
+//                            Toast.LENGTH_LONG
+//                        ).show()
+//
+//                        viewModel.resetState()
+//                    }
+//                }
+//
+//                if (googleAuthUiClient.getSignedInUser() != null) {
+//                    AppNavigation()
+//                } else {
+//                    SignInScreen(
+//                        state = state,
+//                        onSignInClick = {
+//                            lifecycleScope.launch {
+//                                val signInIntentSender = googleAuthUiClient.signIn()
+//                                launcher.launch(
+//                                    IntentSenderRequest.Builder(
+//                                        signInIntentSender ?: return@launch
+//                                    ).build()
+//                                )
+//                            }
+//                        }
+//                    )
+//                }
             }
         }
     }
