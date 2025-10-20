@@ -1,10 +1,6 @@
 package com.iid.iiflashcards.ui.screens.signin
 
-import android.app.Activity.RESULT_OK
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,26 +32,10 @@ fun SignInScreen(
 
 
     LaunchedEffect(key1 = Unit) {
-        println("TODO imn googleAuthUiClient.getSignedInUser() ${viewModel.googleAuthUiClient.getSignedInUser()}")
         if (viewModel.googleAuthUiClient.getSignedInUser() != null) {
             onNavEvent(NavEvent.Home)
         }
     }
-
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartIntentSenderForResult(),
-        onResult = { result ->
-            println("TODO imn result $result")
-            if (result.resultCode == RESULT_OK) {
-                lifecycleScope.launch {
-                    val signInResult = viewModel.googleAuthUiClient.signInWithIntent(
-                        intent = result.data ?: return@launch
-                    )
-                    viewModel.onSignInResult(signInResult)
-                }
-            }
-        }
-    )
 
     LaunchedEffect(key1 = state.isSignInSuccessful) {
         if (state.isSignInSuccessful) {
@@ -90,12 +70,10 @@ fun SignInScreen(
         ) {
             IIButton(text = "sign in") {
                 lifecycleScope.launch {
-                    val signInIntentSender = viewModel.googleAuthUiClient.signIn()
-                    launcher.launch(
-                        IntentSenderRequest.Builder(
-                            signInIntentSender ?: return@launch
-                        ).build()
-                    )
+                    val user = viewModel.googleAuthUiClient.signIn()
+                    if (user != null) {
+                        onNavEvent(NavEvent.Home)
+                    }
                 }
             }
         }

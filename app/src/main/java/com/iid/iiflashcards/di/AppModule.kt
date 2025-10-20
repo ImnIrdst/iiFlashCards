@@ -2,7 +2,6 @@ package com.iid.iiflashcards.di
 
 import android.content.Context
 import androidx.room.Room
-import com.google.android.gms.auth.api.identity.Identity
 import com.iid.iiflashcards.data.model.AppDatabase
 import com.iid.iiflashcards.data.model.CardDao
 import com.iid.iiflashcards.data.model.MockRemoteDataSource
@@ -56,7 +55,6 @@ object AppModule {
     fun provideGoogleAuthUiClient(@ApplicationContext context: Context): GoogleAuthUiClient {
         return GoogleAuthUiClient(
             context = context,
-            oneTapClient = Identity.getSignInClient(context)
         )
     }
 }
