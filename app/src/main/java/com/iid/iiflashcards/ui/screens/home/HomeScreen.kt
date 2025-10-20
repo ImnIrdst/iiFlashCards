@@ -25,7 +25,9 @@ fun HomeScreen(onNavEvent: (NavEvent) -> Unit = {}) {
         ) {
             IIText(text = "Hello there!", style = IITextStyle.DisplayLarge)
             Spacer(modifier = Modifier.size(16.dp))
-            IIButton(text = "Start Learning", onClick = { onNavEvent(NavEvent.DeckReview) })
+            IIButton(text = "Start Learning", onClick = {
+                onNavEvent(NavEvent.DeckReview)
+            })
         }
     }
 }
