@@ -9,19 +9,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    val googleAuthUiClient: GoogleAuthUiClient,
+    private val googleAuthUiClient: GoogleAuthUiClient,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SignInState())
     val state = _state.asStateFlow()
 
-    fun onSignInResult(result: SignInResult) {
-        _state.update {
-            it.copy(
-                isSignInSuccessful = result.data != null, signInError = result.errorMessage
-            )
-        }
-    }
+    fun getUser() = googleAuthUiClient.getSignedInUser()
+    suspend fun signIn() = googleAuthUiClient.signIn()
+    suspend fun signOut() = googleAuthUiClient.signOut()
 
     fun resetState() {
         _state.update { SignInState() }

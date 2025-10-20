@@ -31,14 +31,14 @@ fun ProfileScreen(onNavEvent: (NavEvent) -> Unit = {}) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             IIText(
-                text = "Hello ${viewModel.googleAuthUiClient.getSignedInUser()?.username}!",
+                text = "Hello ${viewModel.getUser()?.username}!",
                 style = IITextStyle.DisplayLarge,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.size(16.dp))
             IIButton(text = "Sign out", onClick = {
                 lifecycleScope.launch {
-                    viewModel.googleAuthUiClient.signOut()
+                    viewModel.signOut()
                     onNavEvent(NavEvent.Login)
                 }
             })

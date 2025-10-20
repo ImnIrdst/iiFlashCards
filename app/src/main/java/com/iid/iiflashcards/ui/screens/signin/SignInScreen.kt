@@ -32,7 +32,7 @@ fun SignInScreen(
 
 
     LaunchedEffect(key1 = Unit) {
-        if (viewModel.googleAuthUiClient.getSignedInUser() != null) {
+        if (viewModel.getUser() != null) {
             onNavEvent(NavEvent.Home)
         }
     }
@@ -70,7 +70,7 @@ fun SignInScreen(
         ) {
             IIButton(text = "sign in") {
                 lifecycleScope.launch {
-                    val user = viewModel.googleAuthUiClient.signIn()
+                    val user = viewModel.signIn()
                     if (user != null) {
                         onNavEvent(NavEvent.Home)
                     }
