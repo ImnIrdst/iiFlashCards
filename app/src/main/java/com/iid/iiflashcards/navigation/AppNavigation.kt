@@ -22,8 +22,16 @@ sealed class NavEvent(val route: String) {
 
 fun doNavigation(navController: NavController, navEvent: NavEvent) {
     when (navEvent) {
-        NavEvent.Home,
         NavEvent.Login,
+        NavEvent.Home -> {
+            navController.navigate(route = navEvent.route) {
+                popUpTo(navController.graph.startDestinationId) {
+                    inclusive = false
+                }
+                launchSingleTop = true
+            }
+        }
+
         NavEvent.Profile,
         NavEvent.AddCard,
         NavEvent.DeckReview -> {
