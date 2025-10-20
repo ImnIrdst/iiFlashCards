@@ -9,6 +9,7 @@ import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.Firebase
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
+import com.iid.iiflashcards.R
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.tasks.await
 
@@ -17,8 +18,6 @@ class GoogleAuthUiClient(
     private val oneTapClient: SignInClient
 ) {
     private val auth = Firebase.auth
-    private val web_client_id =
-        "701117525566-igqted6spk354pav5bl4840cm5ptieqg.apps.googleusercontent.com"
 
     suspend fun signIn(): IntentSender? {
         val result = try {
@@ -83,7 +82,7 @@ class GoogleAuthUiClient(
                 GoogleIdTokenRequestOptions.builder()
                     .setSupported(true)
                     .setFilterByAuthorizedAccounts(false)
-                    .setServerClientId(web_client_id)
+                    .setServerClientId(context.getString(R.string.web_client_id))
                     .build()
             )
             .setAutoSelectEnabled(true)
