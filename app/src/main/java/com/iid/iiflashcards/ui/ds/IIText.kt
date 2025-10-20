@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.iid.iiflashcards.ui.theme.IIFlashCardsTheme
@@ -24,7 +25,8 @@ fun IIText(
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.onBackground,
     emphasis: Emphasis = Emphasis.High,
-    fontWeight: FontWeight = FontWeight.Normal
+    fontWeight: FontWeight = FontWeight.Normal,
+    textAlign: TextAlign = TextAlign.Center
 ) {
     val style = when (style) {
         IITextStyle.DisplayLarge -> MaterialTheme.typography.displayLarge
@@ -42,7 +44,8 @@ fun IIText(
         text = text,
         style = style.copy(fontWeight = fontWeight),
         color = color.copy(alpha = emphasis.alpha),
-        modifier = modifier
+        modifier = modifier,
+        textAlign = textAlign,
     )
 }
 

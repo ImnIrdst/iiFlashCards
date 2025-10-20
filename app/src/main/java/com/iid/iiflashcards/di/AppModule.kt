@@ -2,12 +2,14 @@ package com.iid.iiflashcards.di
 
 import android.content.Context
 import androidx.room.Room
+import com.google.android.gms.auth.api.identity.Identity
 import com.iid.iiflashcards.data.model.AppDatabase
 import com.iid.iiflashcards.data.model.CardDao
 import com.iid.iiflashcards.data.model.MockRemoteDataSource
 import com.iid.iiflashcards.data.model.RemoteDataSource
 import com.iid.iiflashcards.data.repository.CardRepository
 import com.iid.iiflashcards.data.repository.CardRepositoryImpl
+import com.iid.iiflashcards.ui.screens.signin.GoogleAuthUiClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,7 +44,19 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCardRepository(cardDao: CardDao, remoteDataSource: RemoteDataSource): CardRepository {
+    fun provideCardRepository(
+        cardDao: CardDao,
+        remoteDataSource: RemoteDataSource
+    ): CardRepository {
         return CardRepositoryImpl(cardDao, remoteDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGoogleAuthUiClient(@ApplicationContext context: Context): GoogleAuthUiClient {
+        return GoogleAuthUiClient(
+            context = context,
+            oneTapClient = Identity.getSignInClient(context)
+        )
     }
 }

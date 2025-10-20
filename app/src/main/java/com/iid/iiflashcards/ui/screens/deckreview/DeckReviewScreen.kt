@@ -47,10 +47,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.iid.iiflashcards.navigation.NavEvent
 import com.iid.iiflashcards.ui.ds.Emphasis
-import com.iid.iiflashcards.ui.ds.IIButtonOutLinedStyle.Success
-import com.iid.iiflashcards.ui.ds.IIButtonOutLinedStyle.Info
-import com.iid.iiflashcards.ui.ds.IIButtonOutLinedStyle.Warning
 import com.iid.iiflashcards.ui.ds.IIButtonOutLinedStyle.Error
+import com.iid.iiflashcards.ui.ds.IIButtonOutLinedStyle.Info
+import com.iid.iiflashcards.ui.ds.IIButtonOutLinedStyle.Success
+import com.iid.iiflashcards.ui.ds.IIButtonOutLinedStyle.Warning
 import com.iid.iiflashcards.ui.ds.IIButtonOutlined
 import com.iid.iiflashcards.ui.ds.IIScreen
 import com.iid.iiflashcards.ui.ds.IIText
@@ -74,7 +74,7 @@ fun DeckReviewScreenContent(
     onNavEvent: (NavEvent) -> Unit = {},
 ) {
     IIScreen(
-        topBar = { DeckDetailTopAppBar(uiState, onBack = { onNavEvent(NavEvent.PopBackStack) }) },
+        topBar = { DeckDetailTopAppBar(uiState, onNavEvent = onNavEvent) },
         floatingActionButton = {
             DeckDetailFab(
                 isExpanded = uiState.isCardExpanded,
@@ -98,7 +98,7 @@ fun DeckReviewScreenContent(
 }
 
 @Composable
-fun DeckDetailTopAppBar(uiState: UIState, onBack: () -> Unit) {
+fun DeckDetailTopAppBar(uiState: UIState, onNavEvent: (NavEvent) -> Unit) {
 
     Row(
         modifier = Modifier
@@ -106,7 +106,7 @@ fun DeckDetailTopAppBar(uiState: UIState, onBack: () -> Unit) {
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = onBack) {
+        IconButton(onClick = { onNavEvent(NavEvent.PopBackStack) }) {
             Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
         }
         Spacer(Modifier.width(8.dp))
@@ -134,7 +134,7 @@ fun DeckDetailTopAppBar(uiState: UIState, onBack: () -> Unit) {
         }
         Spacer(modifier = Modifier.width(16.dp))
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = { onNavEvent(NavEvent.Profile) },
             modifier = Modifier.background(
                 color = MaterialTheme.colorScheme.secondaryContainer,
                 CircleShape
