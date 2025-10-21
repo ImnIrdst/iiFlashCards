@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.iid.iiflashcards.navigation.NavEvent
@@ -20,8 +19,7 @@ import com.iid.iiflashcards.ui.ds.IITextStyle
 import kotlinx.coroutines.launch
 
 @Composable
-fun ProfileScreen(onNavEvent: (NavEvent) -> Unit = {}) {
-    val viewModel = hiltViewModel<SignInViewModel>()
+fun ProfileScreen(viewModel: SignInViewModel, onNavEvent: (NavEvent) -> Unit = {}) {
     val lifecycleScope = LocalLifecycleOwner.current.lifecycleScope
 
     IIScreen {
@@ -39,7 +37,7 @@ fun ProfileScreen(onNavEvent: (NavEvent) -> Unit = {}) {
             IIButton(text = "Sign out", onClick = {
                 lifecycleScope.launch {
                     viewModel.signOut()
-                    onNavEvent(NavEvent.Login)
+                    onNavEvent(NavEvent.SignIn)
                 }
             })
         }

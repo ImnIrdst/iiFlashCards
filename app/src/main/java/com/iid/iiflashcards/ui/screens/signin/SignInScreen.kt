@@ -12,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -23,9 +22,9 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SignInScreen(
+    viewModel: SignInViewModel,
     onNavEvent: (NavEvent) -> Unit,
 ) {
-    val viewModel = hiltViewModel<SignInViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleScope = LocalLifecycleOwner.current.lifecycleScope
     val currentContext = LocalContext.current
@@ -46,7 +45,6 @@ fun SignInScreen(
             ).show()
 
             onNavEvent(NavEvent.Home)
-            viewModel.resetState()
         }
     }
 
@@ -70,13 +68,9 @@ fun SignInScreen(
         ) {
             IIButton(text = "sign in") {
                 lifecycleScope.launch {
-                    val user = viewModel.signIn()
-                    if (user != null) {
-                        onNavEvent(NavEvent.Home)
-                    }
+                    viewModel.signIn()
                 }
             }
         }
     }
-
 }

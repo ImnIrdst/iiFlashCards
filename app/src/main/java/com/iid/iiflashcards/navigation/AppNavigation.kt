@@ -10,19 +10,20 @@ import com.iid.iiflashcards.ui.screens.deckreview.DeckReviewScreen
 import com.iid.iiflashcards.ui.screens.home.HomeScreen
 import com.iid.iiflashcards.ui.screens.signin.ProfileScreen
 import com.iid.iiflashcards.ui.screens.signin.SignInScreen
+import com.iid.iiflashcards.ui.screens.signin.SignInViewModel
 
 sealed class NavEvent(val route: String) {
     data object Home : NavEvent("home")
     data object DeckReview : NavEvent("deck_review")
     data object AddCard : NavEvent("add_card")
-    data object Login : NavEvent("login")
+    data object SignIn : NavEvent("login")
     data object Profile : NavEvent("profile")
     data object PopBackStack : NavEvent("pop_back_stack")
 }
 
 fun doNavigation(navController: NavController, navEvent: NavEvent) {
     when (navEvent) {
-        NavEvent.Login,
+        NavEvent.SignIn,
         NavEvent.Home -> {
             navController.navigate(route = navEvent.route) {
                 popUpTo(navController.graph.startDestinationId) {
@@ -45,9 +46,9 @@ fun doNavigation(navController: NavController, navEvent: NavEvent) {
 }
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(signInViewModel: SignInViewModel) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = NavEvent.Login.route) {
+    NavHost(navController = navController, startDestination = NavEvent.SignIn.route) {
         composable(NavEvent.Home.route) {
             HomeScreen { doNavigation(navController, navEvent = it) }
         }
@@ -57,11 +58,11 @@ fun AppNavigation() {
         composable(NavEvent.AddCard.route) {
             AddCardScreen { doNavigation(navController, navEvent = it) }
         }
-        composable(NavEvent.Login.route) {
-            SignInScreen { doNavigation(navController, navEvent = it) }
+        composable(NavEvent.SignIn.route) {
+            SignInScreen(signInViewModel) { doNavigation(navController, navEvent = it) }
         }
         composable(NavEvent.Profile.route) {
-            ProfileScreen { doNavigation(navController, navEvent = it) }
+            ProfileScreen(signInViewModel) { doNavigation(navController, navEvent = it) }
         }
     }
 }

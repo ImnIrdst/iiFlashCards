@@ -2,18 +2,20 @@ package com.iid.iiflashcards.di
 
 import android.content.Context
 import androidx.room.Room
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.services.sheets.v4.SheetsScopes
 import com.iid.iiflashcards.data.model.AppDatabase
 import com.iid.iiflashcards.data.model.CardDao
-import com.iid.iiflashcards.data.model.MockRemoteDataSource
+import com.iid.iiflashcards.data.model.GoogleSheetsRemoteDataSource
 import com.iid.iiflashcards.data.model.RemoteDataSource
 import com.iid.iiflashcards.data.repository.CardRepository
 import com.iid.iiflashcards.data.repository.CardRepositoryImpl
-import com.iid.iiflashcards.ui.screens.signin.GoogleAuthUiClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import java.util.Collections
 import javax.inject.Singleton
 
 @Module
@@ -37,8 +39,17 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRemoteDataSource(): RemoteDataSource {
-        return MockRemoteDataSource()
+    fun provideGoogleAccountCredential(@ApplicationContext context: Context): GoogleAccountCredential {
+        return GoogleAccountCredential.usingOAuth2(
+            context,
+            Collections.singleton(SheetsScopes.SPREADSHEETS)
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideRemoteDataSource(credential: GoogleAccountCredential): RemoteDataSource {
+        return GoogleSheetsRemoteDataSource(credential)
     }
 
     @Provides
@@ -48,13 +59,5 @@ object AppModule {
         remoteDataSource: RemoteDataSource
     ): CardRepository {
         return CardRepositoryImpl(cardDao, remoteDataSource)
-    }
-
-    @Provides
-    @Singleton
-    fun provideGoogleAuthUiClient(@ApplicationContext context: Context): GoogleAuthUiClient {
-        return GoogleAuthUiClient(
-            context = context,
-        )
     }
 }
