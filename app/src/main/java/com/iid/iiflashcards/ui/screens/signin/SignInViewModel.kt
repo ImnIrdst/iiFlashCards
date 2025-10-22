@@ -1,6 +1,7 @@
 package com.iid.iiflashcards.ui.screens.signin
 
 import androidx.lifecycle.ViewModel
+import com.iid.iiflashcards.ui.helper.UserData
 import com.iid.iiflashcards.util.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,7 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SignInViewModel @Inject constructor() : ViewModel() {
 
-    private val _state = MutableStateFlow(SignInState())
+    private val _state = MutableStateFlow(State())
     val state = _state.asStateFlow()
 
     val event = SingleLiveEvent<Event>()
@@ -33,11 +34,17 @@ class SignInViewModel @Inject constructor() : ViewModel() {
     }
 
     fun resetState() {
-        _state.update { SignInState() }
+        _state.update { State() }
     }
 
     sealed class Event {
         object SignIn : Event()
         object SignOut : Event()
     }
+
+    data class State(
+        val isSignInSuccessful: Boolean = false,
+        val signInError: String? = null,
+        val userData: UserData? = null,
+    )
 }

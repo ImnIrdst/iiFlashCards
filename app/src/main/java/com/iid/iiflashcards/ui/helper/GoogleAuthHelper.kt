@@ -1,4 +1,4 @@
-package com.iid.iiflashcards.ui.screens.signin
+package com.iid.iiflashcards.ui.helper
 
 import android.accounts.Account
 import android.content.Context
@@ -20,10 +20,10 @@ import com.iid.iiflashcards.util.logGenericError
 import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.cancellation.CancellationException
 
-class GoogleAuthUiClient(
+class GoogleAuthHelper(
     private val context: Context,
     private val accountPrefs: AccountPreferences = AccountPreferences(context.applicationContext),
-    private val credentialManager: CredentialManager = CredentialManager.create(context),
+    private val credentialManager: CredentialManager = CredentialManager.Companion.create(context),
 ) {
     private val auth = Firebase.auth
 
@@ -86,3 +86,9 @@ class GoogleAuthUiClient(
         )
     }
 }
+
+data class UserData(
+    val userId: String,
+    val username: String?,
+    val profilePictureUrl: String?
+)

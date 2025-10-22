@@ -1,4 +1,4 @@
-package com.iid.iiflashcards.ui.screens.signin
+package com.iid.iiflashcards.ui.screens.profile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,6 +16,7 @@ import com.iid.iiflashcards.ui.ds.IIButton
 import com.iid.iiflashcards.ui.ds.IIScreen
 import com.iid.iiflashcards.ui.ds.IIText
 import com.iid.iiflashcards.ui.ds.IITextStyle
+import com.iid.iiflashcards.ui.screens.signin.SignInViewModel
 import kotlinx.coroutines.launch
 
 @Composable

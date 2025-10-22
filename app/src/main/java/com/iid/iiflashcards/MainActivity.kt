@@ -10,8 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.lifecycle.lifecycleScope
 import com.iid.iiflashcards.navigation.AppNavigation
+import com.iid.iiflashcards.ui.helper.GoogleAuthHelper
 import com.iid.iiflashcards.ui.screens.home.HomeScreen
-import com.iid.iiflashcards.ui.screens.signin.GoogleAuthUiClient
 import com.iid.iiflashcards.ui.screens.signin.SignInViewModel
 import com.iid.iiflashcards.ui.theme.IIFlashCardsTheme
 import com.iid.iiflashcards.util.logGenericError
@@ -23,8 +23,8 @@ class MainActivity : ComponentActivity() {
 
     private val signInViewModel: SignInViewModel by viewModels()
 
-    private val googleAuthUiClient: GoogleAuthUiClient by lazy {
-        GoogleAuthUiClient(context = this)
+    private val googleAuthHelper: GoogleAuthHelper by lazy {
+        GoogleAuthHelper(context = this)
     }
 
     private val signInLauncher = registerForActivityResult(
@@ -32,8 +32,8 @@ class MainActivity : ComponentActivity() {
     ) { result ->
         if (result.resultCode == RESULT_OK) {
             lifecycleScope.launch {
-                googleAuthUiClient.handleSignInResult(result.data)
-                signInViewModel.setUser(googleAuthUiClient.getSignedInUser())
+                googleAuthHelper.handleSignInResult(result.data)
+                signInViewModel.setUser(googleAuthHelper.getSignedInUser())
             }
         } else {
             logGenericError(message = "Sign in error $result")
@@ -54,17 +54,17 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun setUpSignInViewModel() = with(signInViewModel) {
-        setUser(googleAuthUiClient.getSignedInUser())
+        setUser(googleAuthHelper.getSignedInUser())
         event.observe(this@MainActivity) { event ->
             lifecycleScope.launch {
                 when (event) {
                     is SignInViewModel.Event.SignIn -> {
-                        val intent = googleAuthUiClient.getSignInIntent()
+                        val intent = googleAuthHelper.getSignInIntent()
                         signInLauncher.launch(intent)
                     }
 
                     is SignInViewModel.Event.SignOut -> {
-                        googleAuthUiClient.signOut()
+                        googleAuthHelper.signOut()
                         resetState()
                     }
                 }

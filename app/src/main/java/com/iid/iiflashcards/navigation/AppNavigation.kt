@@ -7,8 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.iid.iiflashcards.ui.screens.addcard.AddCardScreen
 import com.iid.iiflashcards.ui.screens.deckreview.DeckReviewScreen
-import com.iid.iiflashcards.ui.screens.home.HomeScreen
-import com.iid.iiflashcards.ui.screens.signin.ProfileScreen
+import com.iid.iiflashcards.ui.screens.profile.ProfileScreen
 import com.iid.iiflashcards.ui.screens.signin.SignInScreen
 import com.iid.iiflashcards.ui.screens.signin.SignInViewModel
 
@@ -50,7 +49,8 @@ fun AppNavigation(signInViewModel: SignInViewModel) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = NavEvent.SignIn.route) {
         composable(NavEvent.Home.route) {
-            HomeScreen { doNavigation(navController, navEvent = it) }
+            // HomeScreen { doNavigation(navController, navEvent = it) } // Its empty for now
+            DeckReviewScreen { doNavigation(navController, navEvent = it) }
         }
         composable(NavEvent.DeckReview.route) {
             DeckReviewScreen { doNavigation(navController, navEvent = it) }
