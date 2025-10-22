@@ -10,6 +10,7 @@ import com.iid.iiflashcards.data.model.GoogleSheetsRemoteDataSource
 import com.iid.iiflashcards.data.model.RemoteDataSource
 import com.iid.iiflashcards.data.repository.CardRepository
 import com.iid.iiflashcards.data.repository.CardRepositoryImpl
+import com.iid.iiflashcards.data.sharedpref.AccountPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,6 +22,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
 
     @Provides
     @Singleton
@@ -48,8 +50,11 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRemoteDataSource(credential: GoogleAccountCredential): RemoteDataSource {
-        return GoogleSheetsRemoteDataSource(credential)
+    fun provideRemoteDataSource(
+        @ApplicationContext context: Context,
+        accountPreferences: AccountPreferences,
+    ): RemoteDataSource {
+        return GoogleSheetsRemoteDataSource(context, accountPreferences)
     }
 
     @Provides
