@@ -5,6 +5,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.sheets.v4.Sheets
+import com.google.api.services.sheets.v4.SheetsScopes
 import com.google.api.services.sheets.v4.model.ValueRange
 import com.iid.iiflashcards.R
 import com.iid.iiflashcards.data.model.Card
@@ -26,7 +27,7 @@ class GoogleSheetsDataSource @Inject constructor(
     private fun getSheetsService(): Sheets {
         val credential = GoogleAccountCredential.usingOAuth2(
             context,
-            listOf("https://www.googleapis.com/auth/spreadsheets")
+            listOf(SheetsScopes.SPREADSHEETS)
         )
         credential.selectedAccount = accountPreferences.getSavedAccount()
 

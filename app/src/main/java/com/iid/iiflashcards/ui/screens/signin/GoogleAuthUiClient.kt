@@ -9,6 +9,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
+import com.google.api.services.sheets.v4.SheetsScopes
 import com.google.firebase.Firebase
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
@@ -30,8 +31,10 @@ class GoogleAuthUiClient(
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(context.getString(R.string.default_web_client_id))
             .requestEmail()
-            .requestScopes(Scope("https://www.googleapis.com/auth/spreadsheets"))
+            .requestScopes(Scope(SheetsScopes.SPREADSHEETS))
             .build()
+
+
 
         return GoogleSignIn.getClient(context, gso).signInIntent
     }
