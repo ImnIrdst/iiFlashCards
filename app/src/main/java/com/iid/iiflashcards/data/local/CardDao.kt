@@ -10,8 +10,17 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CardDao {
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
-    suspend fun insertCard(card: Card)
+    suspend fun insertCard(card: Card): Long
+
+    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
+    suspend fun insertCards(card: List<Card>)
 
     @Query("SELECT * FROM cards")
-    fun getAllCards(): Flow<List<Card>>
+    fun getAllCardsFlow(): Flow<List<Card>>
+
+    @Query("SELECT * FROM cards")
+    suspend fun getAllCards(): List<Card>
+
+    @Query("DELETE FROM cards")
+    suspend fun deleteAllCards()
 }

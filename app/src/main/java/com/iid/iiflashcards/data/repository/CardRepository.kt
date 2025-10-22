@@ -2,23 +2,28 @@ package com.iid.iiflashcards.data.repository
 
 import com.iid.iiflashcards.data.local.CardDao
 import com.iid.iiflashcards.data.model.Card
-import com.iid.iiflashcards.data.remote.RemoteDataSource
+import com.iid.iiflashcards.data.remote.GoogleSheetsDataSource
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-interface CardRepository {
-    suspend fun saveCard(card: Card)
-    fun getAllCards(): Flow<List<Card>>
-}
-
-class CardRepositoryImpl(
+class CardRepository @Inject constructor(
     private val cardDao: CardDao,
-    private val remoteDataSource: RemoteDataSource
-) : CardRepository {
+    private val remoteDataSource: GoogleSheetsDataSource
+) {
 
-    override suspend fun saveCard(card: Card) {
+    suspend fun saveCard(card: Card) {
         cardDao.insertCard(card)
-        remoteDataSource.saveCard(card)
+        remoteDataSource.saveCards(getAllCards())
     }
 
-    override fun getAllCards(): Flow<List<Card>> = cardDao.getAllCards()
+    suspend fun getAllCards() = cardDao.getAllCards()
+
+    suspend fun refreshCards() {
+        val allCards = remoteDataSource.getAllCards()
+
+        cardDao.deleteAllCards()
+        cardDao.insertCards(allCards)
+    }
+
+    fun getAllCardsFlow(): Flow<List<Card>> = cardDao.getAllCardsFlow()
 }

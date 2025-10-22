@@ -8,18 +8,19 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DeckReviewViewModel @Inject constructor(
-    cardRepository: CardRepository
+    private val cardRepository: CardRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UIState())
     val uiState: StateFlow<UIState> = _uiState
 
     init {
-        cardRepository.getAllCards().onEach { cards ->
+        cardRepository.getAllCardsFlow().onEach { cards ->
             _uiState.value = UIState(
                 cards = cards.map {
                     UIState.Card(
@@ -31,12 +32,14 @@ class DeckReviewViewModel @Inject constructor(
                 }
             )
         }.launchIn(viewModelScope)
+        onRefresh()
     }
 
     fun onEvent(event: Event) {
         when (event) {
             is Event.OnReveal -> onReveal()
             is Event.OnEasy -> onEasy()
+            is Event.OnRefresh -> onRefresh()
         }
     }
 
@@ -48,15 +51,24 @@ class DeckReviewViewModel @Inject constructor(
     private fun onReveal() {
         _uiState.value = _uiState.value.toggleCardReveal()
     }
+
+    private fun onRefresh() = viewModelScope.launch {
+        _uiState.value = _uiState.value.copy(isRefreshing = true)
+        cardRepository.refreshCards()
+        _uiState.value = _uiState.value.copy(isRefreshing = false)
+    }
 }
 
 sealed class Event {
     data object OnReveal : Event()
     data object OnEasy : Event()
+
+    data object OnRefresh : Event()
 }
 
 data class UIState(
     val cardIndex: Int = 0,
+    val isRefreshing: Boolean = false,
     val cards: List<Card> = emptyList(),
 ) {
     data class Card(

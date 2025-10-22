@@ -23,10 +23,12 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
@@ -74,12 +76,10 @@ fun DeckReviewScreenContent(
     onNavEvent: (NavEvent) -> Unit = {},
 ) {
     IIScreen(
-        topBar = { DeckDetailTopAppBar(uiState, onNavEvent = onNavEvent) },
+        topBar = { DeckDetailTopAppBar(uiState, onEvent = onEvent, onNavEvent = onNavEvent) },
         floatingActionButton = {
             DeckDetailFab(
-                isExpanded = uiState.isCardExpanded,
-                onEvent = onEvent,
-                onNavEvent = onNavEvent
+                isExpanded = uiState.isCardExpanded, onEvent = onEvent, onNavEvent = onNavEvent
             )
         },
         floatingActionButtonPosition = FabPosition.Center
@@ -98,7 +98,11 @@ fun DeckReviewScreenContent(
 }
 
 @Composable
-fun DeckDetailTopAppBar(uiState: UIState, onNavEvent: (NavEvent) -> Unit) {
+fun DeckDetailTopAppBar(
+    uiState: UIState,
+    onEvent: (Event) -> Unit,
+    onNavEvent: (NavEvent) -> Unit,
+) {
 
     Row(
         modifier = Modifier
@@ -113,7 +117,7 @@ fun DeckDetailTopAppBar(uiState: UIState, onNavEvent: (NavEvent) -> Unit) {
         Column(modifier = Modifier.weight(1f)) {
             IIText(
                 text = "Common Words",
-                style = IITextStyle.HeadlineMedium,
+                style = IITextStyle.HeadlineSmall,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(4.dp))
@@ -133,11 +137,33 @@ fun DeckDetailTopAppBar(uiState: UIState, onNavEvent: (NavEvent) -> Unit) {
             }
         }
         Spacer(modifier = Modifier.width(16.dp))
+        if (uiState.isRefreshing) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .padding(4.dp)
+                    .size(32.dp)
+            )
+        } else {
+            IconButton(
+                onClick = { onEvent(Event.OnRefresh) },
+                modifier = Modifier
+                    .background(
+                        color = MaterialTheme.colorScheme.background,
+                        CircleShape
+                    )
+                    .size(40.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Refresh,
+                    contentDescription = "Listen",
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.width(8.dp))
         IconButton(
-            onClick = { onNavEvent(NavEvent.Profile) },
-            modifier = Modifier.background(
-                color = MaterialTheme.colorScheme.secondaryContainer,
-                CircleShape
+            onClick = { onNavEvent(NavEvent.Profile) }, modifier = Modifier.background(
+                color = MaterialTheme.colorScheme.secondaryContainer, CircleShape
             )
         ) {
             Icon(
@@ -151,8 +177,7 @@ fun DeckDetailTopAppBar(uiState: UIState, onNavEvent: (NavEvent) -> Unit) {
 @Composable
 fun DeckStats() {
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceAround
+        modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround
     ) {
         StatItem(count = 3, label = "Learning", color = Color(0xFF5856D6))
         StatItem(count = 2, label = "Reviewing", color = Color.LightGray)
@@ -173,9 +198,7 @@ fun StatItem(count: Int, label: String, color: Color) {
             IIText(label, style = IITextStyle.BodySmall, emphasis = Emphasis.Medium)
         }
         IIText(
-            count.toString(),
-            style = IITextStyle.HeadlineMedium,
-            fontWeight = FontWeight.Bold
+            count.toString(), style = IITextStyle.HeadlineMedium, fontWeight = FontWeight.Bold
         )
     }
 }
@@ -216,12 +239,9 @@ fun Flashcard(state: UIState, onEvent: (Event) -> Unit) {
                         )
                     }
                     IconButton(
-                        onClick = { /*TODO*/ },
-                        modifier = Modifier.background(
-                            color = MaterialTheme.colorScheme.tertiary,
-                            shape = CircleShape
-                        ),
-                        colors = IconButtonDefaults.iconButtonColors(
+                        onClick = { /*TODO*/ }, modifier = Modifier.background(
+                            color = MaterialTheme.colorScheme.tertiary, shape = CircleShape
+                        ), colors = IconButtonDefaults.iconButtonColors(
                             containerColor = MaterialTheme.colorScheme.tertiary,
                             contentColor = MaterialTheme.colorScheme.onTertiary
                         )
@@ -234,21 +254,16 @@ fun Flashcard(state: UIState, onEvent: (Event) -> Unit) {
                 }
             }
             AnimatedVisibility(
-                visible = state.isCardExpanded,
-                enter = expandVertically(
-                    expandFrom = Alignment.Top,
-                    animationSpec = tween()
-                ),
-                exit = shrinkVertically(
-                    shrinkTowards = Alignment.Top,
-                    animationSpec = tween()
+                visible = state.isCardExpanded, enter = expandVertically(
+                    expandFrom = Alignment.Top, animationSpec = tween()
+                ), exit = shrinkVertically(
+                    shrinkTowards = Alignment.Top, animationSpec = tween()
                 )
             ) {
                 Column {
                     Column(modifier = Modifier.padding(24.dp)) {
                         IIText(
-                            text = card.back,
-                            style = IITextStyle.BodyLarge
+                            text = card.back, style = IITextStyle.BodyLarge
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         IIText(
@@ -259,8 +274,7 @@ fun Flashcard(state: UIState, onEvent: (Event) -> Unit) {
                     }
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(
-                            space = 8.dp,
-                            alignment = Alignment.CenterHorizontally
+                            space = 8.dp, alignment = Alignment.CenterHorizontally
                         ),
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
@@ -289,9 +303,7 @@ fun Flashcard(state: UIState, onEvent: (Event) -> Unit) {
 
 @Composable
 fun DeckDetailFab(
-    isExpanded: Boolean,
-    onEvent: (Event) -> Unit,
-    onNavEvent: (NavEvent) -> Unit
+    isExpanded: Boolean, onEvent: (Event) -> Unit, onNavEvent: (NavEvent) -> Unit
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
