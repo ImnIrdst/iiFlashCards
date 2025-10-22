@@ -1,0 +1,53 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "38f88c6f3aa19eb0e291c3a671d05a73",
+    "entities": [
+      {
+        "tableName": "cards",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `front` TEXT NOT NULL, `frontHint` TEXT, `back` TEXT NOT NULL, `backHint` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "front",
+            "columnName": "front",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "frontHint",
+            "columnName": "frontHint",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "back",
+            "columnName": "back",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "backHint",
+            "columnName": "backHint",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '38f88c6f3aa19eb0e291c3a671d05a73')"
+    ]
+  }
+}

@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
+    id("androidx.room")
 }
 
 android {
@@ -57,6 +58,10 @@ android {
             excludes += "META-INF/LICENSE.md"
         }
     }
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
 dependencies {
