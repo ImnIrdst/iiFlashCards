@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.room.Room
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.services.sheets.v4.SheetsScopes
-import com.iid.iiflashcards.data.model.AppDatabase
-import com.iid.iiflashcards.data.model.CardDao
-import com.iid.iiflashcards.data.model.GoogleSheetsRemoteDataSource
+import com.iid.iiflashcards.data.local.AppDatabase
+import com.iid.iiflashcards.data.local.CardDao
 import com.iid.iiflashcards.data.model.RemoteDataSource
+import com.iid.iiflashcards.data.remote.GoogleSheetsDataSource
 import com.iid.iiflashcards.data.repository.CardRepository
 import com.iid.iiflashcards.data.repository.CardRepositoryImpl
 import com.iid.iiflashcards.data.sharedpref.AccountPreferences
@@ -54,7 +54,7 @@ object AppModule {
         @ApplicationContext context: Context,
         accountPreferences: AccountPreferences,
     ): RemoteDataSource {
-        return GoogleSheetsRemoteDataSource(context, accountPreferences)
+        return GoogleSheetsDataSource(context, accountPreferences)
     }
 
     @Provides

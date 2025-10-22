@@ -1,7 +1,7 @@
 package com.iid.iiflashcards.data.repository
 
+import com.iid.iiflashcards.data.local.CardDao
 import com.iid.iiflashcards.data.model.Card
-import com.iid.iiflashcards.data.model.CardDao
 import com.iid.iiflashcards.data.model.RemoteDataSource
 import kotlinx.coroutines.flow.Flow
 

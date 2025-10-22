@@ -48,6 +48,15 @@ android {
     buildFeatures {
         compose = true
     }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}" // Good practice to exclude license files
+            excludes += "META-INF/DEPENDENCIES"      // This is the specific fix for your error
+            excludes += "META-INF/NOTICE.md"
+            excludes += "META-INF/LICENSE.md"
+        }
+    }
 }
 
 dependencies {
@@ -72,6 +81,12 @@ dependencies {
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
     implementation(libs.play.services.auth)
+    implementation("com.google.api-client:google-api-client-android:2.4.0") {
+        exclude(group = "com.google.guava", module = "guava-jdk5")
+    }
+    implementation("com.google.apis:google-api-services-sheets:v4-rev516-1.23.0") {
+        exclude(group = "com.google.guava", module = "guava-jdk5")
+    }
     ksp(libs.androidx.room.compiler)
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)

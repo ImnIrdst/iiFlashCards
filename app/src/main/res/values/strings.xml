@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">iiFlashCards</string>
+    <string name="app_name" translatable="false">iiFlashCards</string>
     <string name="web_client_id" translatable="false">701117525566-dct14rd7esa45sl140dehe1r5eomp0kq.apps.googleusercontent.com</string>
 </resources>
