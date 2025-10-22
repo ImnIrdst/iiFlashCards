@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
-    id("androidx.room")
+    alias(libs.plugins.androidx.room)
 }
 
 android {
