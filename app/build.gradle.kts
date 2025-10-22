@@ -86,10 +86,10 @@ dependencies {
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
     implementation(libs.play.services.auth)
-    implementation("com.google.api-client:google-api-client-android:2.4.0") {
+    implementation(libs.google.api.client.android) {
         exclude(group = "com.google.guava", module = "guava-jdk5")
     }
-    implementation("com.google.apis:google-api-services-sheets:v4-rev516-1.23.0") {
+    implementation(libs.google.api.services.sheets) {
         exclude(group = "com.google.guava", module = "guava-jdk5")
     }
     ksp(libs.androidx.room.compiler)
