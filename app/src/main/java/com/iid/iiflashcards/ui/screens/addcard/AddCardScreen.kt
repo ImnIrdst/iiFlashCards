@@ -36,7 +36,7 @@ fun AddCardScreen(
 
     AddCardScreenContent(
         uiState,
-        onEvent = viewModel::onEvent,
+        onAction = viewModel::doAction,
         onNavEvent = onNavEvent
     )
 }
@@ -44,39 +44,39 @@ fun AddCardScreen(
 @Composable
 fun AddCardScreenContent(
     uiState: AddCardUiState,
-    onEvent: (Event) -> Unit = {},
+    onAction: (Action) -> Unit = {},
     onNavEvent: (NavEvent) -> Unit = {}
 ) {
     IIScreen(
         topBar = {
-            AddCardTopAppBar(onNavEvent, onEvent)
+            AddCardTopAppBar(onNavEvent, onAction)
         }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             OutlinedTextField(
                 value = uiState.front,
-                onValueChange = { onEvent(Event.OnFrontChange(it)) },
+                onValueChange = { onAction(Action.OnFrontChange(it)) },
                 label = { Text("Front") },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = uiState.frontHint,
-                onValueChange = { onEvent(Event.OnFrontHintChange(it)) },
+                onValueChange = { onAction(Action.OnFrontHintChange(it)) },
                 label = { Text("Front Hint (optional)") },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(16.dp))
             OutlinedTextField(
                 value = uiState.back,
-                onValueChange = { onEvent(Event.OnBackChange(it)) },
+                onValueChange = { onAction(Action.OnBackChange(it)) },
                 label = { Text("Back") },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = uiState.backHint,
-                onValueChange = { onEvent(Event.OnBackHintChange(it)) },
+                onValueChange = { onAction(Action.OnBackHintChange(it)) },
                 label = { Text("Back Hint (optional)") },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -85,7 +85,7 @@ fun AddCardScreenContent(
 }
 
 @Composable
-private fun AddCardTopAppBar(onNavEvent: (NavEvent) -> Unit, onEvent: (Event) -> Unit) {
+private fun AddCardTopAppBar(onNavEvent: (NavEvent) -> Unit, onAction: (Action) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -102,7 +102,7 @@ private fun AddCardTopAppBar(onNavEvent: (NavEvent) -> Unit, onEvent: (Event) ->
         )
         IconButton(
             onClick = {
-                onEvent(Event.OnSave)
+                onAction(Action.OnSave)
                 onNavEvent(NavEvent.PopBackStack)
             }) {
             Icon(imageVector = Icons.Default.Done, contentDescription = "Save")

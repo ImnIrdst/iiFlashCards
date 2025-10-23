@@ -67,20 +67,20 @@ fun DeckReviewScreen(
     onNavEvent: (NavEvent) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    DeckReviewScreenContent(uiState, viewModel::onEvent, onNavEvent)
+    DeckReviewScreenContent(uiState, viewModel::onAction, onNavEvent)
 }
 
 @Composable
 fun DeckReviewScreenContent(
     uiState: UIState,
-    onEvent: (Event) -> Unit = {},
+    onAction: (Action) -> Unit = {},
     onNavEvent: (NavEvent) -> Unit = {},
 ) {
     IIScreen(
-        topBar = { DeckDetailTopAppBar(uiState, onEvent = onEvent, onNavEvent = onNavEvent) },
+        topBar = { DeckDetailTopAppBar(uiState, onAction = onAction, onNavEvent = onNavEvent) },
         floatingActionButton = {
             DeckDetailFab(
-                isExpanded = uiState.isCardExpanded, onEvent = onEvent, onNavEvent = onNavEvent
+                isExpanded = uiState.isCardExpanded, onAction = onAction, onNavEvent = onNavEvent
             )
         },
         floatingActionButtonPosition = FabPosition.Center
@@ -93,7 +93,7 @@ fun DeckReviewScreenContent(
             Spacer(modifier = Modifier.height(16.dp))
             DeckStats()
             Spacer(modifier = Modifier.height(24.dp))
-            Flashcard(uiState, onEvent)
+            Flashcard(uiState, onAction)
         }
     }
 }
@@ -101,7 +101,7 @@ fun DeckReviewScreenContent(
 @Composable
 fun DeckDetailTopAppBar(
     uiState: UIState,
-    onEvent: (Event) -> Unit,
+    onAction: (Action) -> Unit,
     onNavEvent: (NavEvent) -> Unit,
 ) {
 
@@ -146,7 +146,7 @@ fun DeckDetailTopAppBar(
             )
         } else {
             IconButton(
-                onClick = { onEvent(Event.OnRefresh) }, modifier = Modifier
+                onClick = { onAction(Action.OnRefresh) }, modifier = Modifier
                     .background(
                         color = MaterialTheme.colorScheme.background, CircleShape
                     )
@@ -203,7 +203,7 @@ fun StatItem(count: Int, label: String, color: Color) {
 }
 
 @Composable
-fun Flashcard(state: UIState, onEvent: (Event) -> Unit) {
+fun Flashcard(state: UIState, onAction: (Action) -> Unit) {
     val card = state.currentCard ?: return
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -290,16 +290,16 @@ fun Flashcard(state: UIState, onEvent: (Event) -> Unit) {
                             .padding(vertical = 16.dp)
                     ) {
                         IIButtonOutlined(text = "Again", subText = "1m", style = Error) {
-                            onEvent(Event.OnAgain)
+                            onAction(Action.OnAgain)
                         }
                         IIButtonOutlined(text = "Hard", subText = "10m", style = Warning) {
-                            onEvent(Event.OnHard)
+                            onAction(Action.OnHard)
                         }
                         IIButtonOutlined(text = "Good", subText = "1d", style = Info) {
-                            onEvent(Event.OnGood)
+                            onAction(Action.OnGood)
                         }
                         IIButtonOutlined(text = "Easy", subText = "4d", style = Success) {
-                            onEvent(Event.OnEasy)
+                            onAction(Action.OnEasy)
                         }
                     }
                 }
@@ -311,7 +311,7 @@ fun Flashcard(state: UIState, onEvent: (Event) -> Unit) {
 
 @Composable
 fun DeckDetailFab(
-    isExpanded: Boolean, onEvent: (Event) -> Unit, onNavEvent: (NavEvent) -> Unit
+    isExpanded: Boolean, onAction: (Action) -> Unit, onNavEvent: (NavEvent) -> Unit
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -325,7 +325,7 @@ fun DeckDetailFab(
             Icon(imageVector = Icons.Default.FavoriteBorder, contentDescription = "difficult")
         }
         FloatingActionButton(
-            onClick = { onEvent(Event.OnReveal) },
+            onClick = { onAction(Action.OnReveal) },
             shape = RoundedCornerShape(24.dp),
             modifier = Modifier.size(72.dp),
             elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 4.dp)

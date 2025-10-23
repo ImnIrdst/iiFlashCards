@@ -42,14 +42,14 @@ class DeckReviewViewModel @Inject constructor(
         onRefresh()
     }
 
-    fun onEvent(event: Event) {
-        when (event) {
-            is Event.OnReveal -> onReveal()
-            is Event.OnRefresh -> onRefresh()
-            is Event.OnEasy -> onUpdateCardDate(Easy)
-            is Event.OnAgain -> onUpdateCardDate(Again)
-            is Event.OnGood -> onUpdateCardDate(Good)
-            is Event.OnHard -> onUpdateCardDate(Hard)
+    fun onAction(action: Action) {
+        when (action) {
+            is Action.OnReveal -> onReveal()
+            is Action.OnRefresh -> onRefresh()
+            is Action.OnEasy -> onUpdateCardDate(Easy)
+            is Action.OnAgain -> onUpdateCardDate(Again)
+            is Action.OnGood -> onUpdateCardDate(Good)
+            is Action.OnHard -> onUpdateCardDate(Hard)
         }
     }
 
@@ -80,14 +80,14 @@ class DeckReviewViewModel @Inject constructor(
     }
 }
 
-sealed class Event {
-    data object OnAgain : Event()
-    data object OnHard : Event()
-    data object OnGood : Event()
-    data object OnEasy : Event()
+sealed class Action {
+    data object OnAgain : Action()
+    data object OnHard : Action()
+    data object OnGood : Action()
+    data object OnEasy : Action()
 
-    data object OnReveal : Event()
-    data object OnRefresh : Event()
+    data object OnReveal : Action()
+    data object OnRefresh : Action()
 }
 
 data class UIState(
