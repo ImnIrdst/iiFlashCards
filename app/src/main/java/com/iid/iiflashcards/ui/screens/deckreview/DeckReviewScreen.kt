@@ -44,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -145,11 +146,9 @@ fun DeckDetailTopAppBar(
             )
         } else {
             IconButton(
-                onClick = { onEvent(Event.OnRefresh) },
-                modifier = Modifier
+                onClick = { onEvent(Event.OnRefresh) }, modifier = Modifier
                     .background(
-                        color = MaterialTheme.colorScheme.background,
-                        CircleShape
+                        color = MaterialTheme.colorScheme.background, CircleShape
                     )
                     .size(40.dp)
             ) {
@@ -220,34 +219,40 @@ fun Flashcard(state: UIState, onEvent: (Event) -> Unit) {
                     )
                     .padding(start = 24.dp, end = 24.dp, top = 32.dp, bottom = 24.dp)
             ) {
-                Spacer(Modifier.height(128.dp))
+                Spacer(Modifier.height(64.dp))
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
+                    verticalAlignment = Alignment.Bottom,
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Column {
+                    Column(Modifier.weight(1f)) {
                         IIText(
                             text = card.front,
                             style = IITextStyle.HeadlineMedium,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Start,
                         )
+                        Spacer(Modifier.size(8.dp))
                         IIText(
                             text = card.frontHint,
-                            style = IITextStyle.BodyLarge,
+                            style = IITextStyle.BodyMedium,
                             emphasis = Emphasis.Medium,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier.padding(end = 8.dp)
                         )
                     }
                     IconButton(
-                        onClick = { /*TODO*/ }, modifier = Modifier.background(
+                        onClick = { /*TODO*/ },
+                        modifier = Modifier.background(
                             color = MaterialTheme.colorScheme.tertiary, shape = CircleShape
                         ), colors = IconButtonDefaults.iconButtonColors(
                             containerColor = MaterialTheme.colorScheme.tertiary,
-                            contentColor = MaterialTheme.colorScheme.onTertiary
+                            contentColor = MaterialTheme.colorScheme.onTertiary,
                         )
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.VolumeUp,
+                            tint = MaterialTheme.colorScheme.onTertiary,
                             contentDescription = "Listen",
                         )
                     }
@@ -263,18 +268,21 @@ fun Flashcard(state: UIState, onEvent: (Event) -> Unit) {
                 Column {
                     Column(modifier = Modifier.padding(24.dp)) {
                         IIText(
-                            text = card.back, style = IITextStyle.BodyLarge
+                            text = card.back, style = IITextStyle.TitleMedium,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Start,
                         )
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.size(8.dp))
                         IIText(
                             text = card.backHint,
                             style = IITextStyle.BodyMedium,
-                            emphasis = Emphasis.Medium
+                            emphasis = Emphasis.Medium,
+                            textAlign = TextAlign.Start,
                         )
                     }
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(
-                            space = 8.dp, alignment = Alignment.CenterHorizontally
+                            space = 4.dp, alignment = Alignment.CenterHorizontally
                         ),
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
@@ -282,13 +290,13 @@ fun Flashcard(state: UIState, onEvent: (Event) -> Unit) {
                             .padding(vertical = 16.dp)
                     ) {
                         IIButtonOutlined(text = "Again", subText = "1m", style = Error) {
-                            onEvent(Event.OnEasy)
+                            onEvent(Event.OnAgain)
                         }
                         IIButtonOutlined(text = "Hard", subText = "10m", style = Warning) {
-                            onEvent(Event.OnEasy)
+                            onEvent(Event.OnHard)
                         }
                         IIButtonOutlined(text = "Good", subText = "1d", style = Info) {
-                            onEvent(Event.OnEasy)
+                            onEvent(Event.OnGood)
                         }
                         IIButtonOutlined(text = "Easy", subText = "4d", style = Success) {
                             onEvent(Event.OnEasy)
@@ -347,10 +355,10 @@ fun Preview() {
             uiState = UIState(
                 cards = listOf(
                     UIState.Card(
-                        front = "institute",
-                        frontHint = "'ɪn.stɪ.tfuːt",
-                        back = "noun [ C ]: an organization whose purpose is to advance the study of a particular subject.",
-                        backHint = "The National Institutes of Health fund medical research in many areas.",
+                        front = "Aflevering",
+                        frontHint = "De nieuwste aflevering van mijn favoriete serie is net uitgekomen.",
+                        back = "Episode, Installment, Part, Segment",
+                        backHint = "The latest episode of my favorite show just came out.",
                     )
                 )
             )

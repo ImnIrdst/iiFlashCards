@@ -2,7 +2,7 @@ package com.iid.iiflashcards.ui.screens.addcard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.iid.iiflashcards.data.model.Card
+import com.iid.iiflashcards.data.model.CardEntity
 import com.iid.iiflashcards.data.repository.CardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,6 +18,7 @@ class AddCardViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(AddCardUiState())
     val uiState: StateFlow<AddCardUiState> = _uiState
 
+    // TODO rename Event to Action
     fun onEvent(event: Event) {
         _uiState.value = when (event) {
             is Event.OnFrontChange -> _uiState.value.copy(front = event.text)
@@ -33,11 +34,11 @@ class AddCardViewModel @Inject constructor(
 
     private fun saveCard() {
         viewModelScope.launch {
-            val card = Card(
+            val card = CardEntity(
                 front = _uiState.value.front,
                 frontHint = _uiState.value.frontHint,
                 back = _uiState.value.back,
-                backHint = _uiState.value.backHint
+                backHint = _uiState.value.backHint,
             )
             cardRepository.saveCard(card)
         }

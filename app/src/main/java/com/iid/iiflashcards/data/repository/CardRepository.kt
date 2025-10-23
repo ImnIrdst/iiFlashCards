@@ -1,7 +1,7 @@
 package com.iid.iiflashcards.data.repository
 
 import com.iid.iiflashcards.data.local.CardDao
-import com.iid.iiflashcards.data.model.Card
+import com.iid.iiflashcards.data.model.CardEntity
 import com.iid.iiflashcards.data.remote.GoogleSheetsDataSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -11,8 +11,15 @@ class CardRepository @Inject constructor(
     private val remoteDataSource: GoogleSheetsDataSource
 ) {
 
-    suspend fun saveCard(card: Card) {
+    suspend fun saveCard(card: CardEntity) {
         cardDao.insertCard(card)
+        remoteDataSource.saveCards(getAllCards())
+    }
+
+    suspend fun updateCard(card: CardEntity?) {
+        card ?: return
+        
+        cardDao.updateCard(card)
         remoteDataSource.saveCards(getAllCards())
     }
 
@@ -25,5 +32,5 @@ class CardRepository @Inject constructor(
         cardDao.insertCards(allCards)
     }
 
-    fun getAllCardsFlow(): Flow<List<Card>> = cardDao.getAllCardsFlow()
+    fun getAllCardsFlow(): Flow<List<CardEntity>> = cardDao.getAllCardsFlow()
 }

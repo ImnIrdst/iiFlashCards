@@ -8,4 +8,5 @@ fun logGenericError(message: String? = null, e: Exception? = null) {
     Log.w("TODO imn", msg)
 }
 
-fun logDebugMessage(message: String) = println("TODO imn: $message")
+@Suppress("unused")
+fun debugLog(message: String) = println("TODO imn: $message")

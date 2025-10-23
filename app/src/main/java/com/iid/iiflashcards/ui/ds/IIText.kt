@@ -34,6 +34,8 @@ fun IIText(
         IITextStyle.HeadlineMedium -> MaterialTheme.typography.headlineMedium
         IITextStyle.HeadlineSmall -> MaterialTheme.typography.headlineSmall
         IITextStyle.TitleLarge -> MaterialTheme.typography.titleLarge
+        IITextStyle.TitleMedium -> MaterialTheme.typography.titleMedium
+        IITextStyle.TitleSmall -> MaterialTheme.typography.titleSmall
         IITextStyle.BodyLarge -> MaterialTheme.typography.bodyLarge
         IITextStyle.BodyMedium -> MaterialTheme.typography.bodyMedium
         IITextStyle.BodySmall -> MaterialTheme.typography.bodySmall
@@ -62,6 +64,8 @@ sealed class IITextStyle {
     data object DisplayLarge : IITextStyle()
     data object HeadlineLarge : IITextStyle()
     data object TitleLarge : IITextStyle()
+    data object TitleMedium : IITextStyle()
+    data object TitleSmall : IITextStyle()
     data object BodyLarge : IITextStyle()
     data object BodyMedium : IITextStyle()
     data object BodySmall : IITextStyle()
@@ -86,6 +90,8 @@ private fun Preview() {
                 PreviewGroup(IITextStyle.HeadlineMedium, false)
                 PreviewGroup(IITextStyle.HeadlineSmall, false)
                 PreviewGroup(IITextStyle.TitleLarge)
+                PreviewGroup(IITextStyle.TitleMedium)
+                PreviewGroup(IITextStyle.TitleSmall)
                 PreviewGroup(IITextStyle.BodyLarge)
                 PreviewGroup(IITextStyle.BodyMedium)
                 PreviewGroup(IITextStyle.BodySmall)

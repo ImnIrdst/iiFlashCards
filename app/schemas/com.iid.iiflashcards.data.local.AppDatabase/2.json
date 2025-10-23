@@ -1,12 +1,12 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 1,
-    "identityHash": "f63445b27c23aabfe758ca262d831733",
+    "version": 2,
+    "identityHash": "72cb81ebf880f55b9671d2757696dbcd",
     "entities": [
       {
         "tableName": "cards",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `front` TEXT NOT NULL, `frontHint` TEXT, `back` TEXT NOT NULL, `backHint` TEXT, `reviewData` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `front` TEXT NOT NULL, `frontHint` TEXT, `back` TEXT NOT NULL, `backHint` TEXT, `reviewDate` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -37,9 +37,9 @@
             "affinity": "TEXT"
           },
           {
-            "fieldPath": "reviewData",
-            "columnName": "reviewData",
-            "affinity": "TEXT",
+            "fieldPath": "reviewDate",
+            "columnName": "reviewDate",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -53,7 +53,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f63445b27c23aabfe758ca262d831733')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '72cb81ebf880f55b9671d2757696dbcd')"
     ]
   }
 }

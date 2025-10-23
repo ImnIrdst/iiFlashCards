@@ -2,9 +2,12 @@ package com.iid.iiflashcards.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.iid.iiflashcards.data.model.Card
+import androidx.room.TypeConverters
+import com.iid.iiflashcards.data.local.converter.DateConverter
+import com.iid.iiflashcards.data.model.CardEntity
 
-@Database(entities = [Card::class], version = 1, exportSchema = true)
+@Database(entities = [CardEntity::class], version = 2, exportSchema = true)
+@TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun cardDao(): CardDao
 }

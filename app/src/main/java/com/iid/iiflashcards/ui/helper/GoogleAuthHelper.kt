@@ -15,7 +15,6 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
 import com.iid.iiflashcards.R
 import com.iid.iiflashcards.data.sharedpref.AccountPreferences
-import com.iid.iiflashcards.util.logDebugMessage
 import com.iid.iiflashcards.util.logGenericError
 import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.cancellation.CancellationException
@@ -41,7 +40,6 @@ class GoogleAuthHelper(
 
     suspend fun handleSignInResult(data: Intent?): Account? {
         try {
-            logDebugMessage("handleSignInResult $data extras: ${data?.extras}")
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             val account = task.getResult(ApiException::class.java)!!
 
