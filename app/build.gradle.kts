@@ -56,6 +56,8 @@ android {
             excludes += "META-INF/DEPENDENCIES"      // This is the specific fix for your error
             excludes += "META-INF/NOTICE.md"
             excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/INDEX.LIST"
+            excludes += "META-INF/DEPENDENCIES"
         }
     }
 }
@@ -92,6 +94,8 @@ dependencies {
     implementation(libs.google.api.services.sheets) {
         exclude(group = "com.google.guava", module = "guava-jdk5")
     }
+    implementation(libs.google.cloud.texttospeech)
+    implementation(libs.grpc.okhttp)
     ksp(libs.androidx.room.compiler)
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)

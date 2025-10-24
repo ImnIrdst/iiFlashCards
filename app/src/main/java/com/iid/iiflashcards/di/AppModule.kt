@@ -3,7 +3,7 @@ package com.iid.iiflashcards.di
 import android.content.Context
 import androidx.room.Room
 import com.iid.iiflashcards.data.local.AppDatabase
-import com.iid.iiflashcards.data.local.CardDao
+import com.iid.iiflashcards.ui.helper.TTSHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,19 +15,15 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-
     @Provides
     @Singleton
-    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
-        return Room.databaseBuilder(
-            context,
-            AppDatabase::class.java,
-            "flashcards-db"
-        ).build()
-    }
+    fun provideAppDatabase(@ApplicationContext context: Context) = Room.databaseBuilder(
+        context, AppDatabase::class.java, "flashcards-db",
+    ).build()
 
     @Provides
-    fun provideCardDao(database: AppDatabase): CardDao {
-        return database.cardDao()
-    }
+    fun provideCardDao(database: AppDatabase) = database.cardDao()
+
+    @Provides
+    fun provideTTs(@ApplicationContext context: Context) = TTSHelper(context)
 }

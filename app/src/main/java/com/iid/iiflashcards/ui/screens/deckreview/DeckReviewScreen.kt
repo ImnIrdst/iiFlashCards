@@ -80,7 +80,9 @@ fun DeckReviewScreenContent(
         topBar = { DeckDetailTopAppBar(uiState, onAction = onAction, onNavEvent = onNavEvent) },
         floatingActionButton = {
             DeckDetailFab(
-                isExpanded = uiState.isCardExpanded, onAction = onAction, onNavEvent = onNavEvent
+                isExpanded = uiState.isCardExpanded,
+                onAction = onAction,
+                onNavEvent = onNavEvent,
             )
         },
         floatingActionButtonPosition = FabPosition.Center
@@ -242,7 +244,7 @@ fun Flashcard(state: UIState, onAction: (Action) -> Unit) {
                         )
                     }
                     IconButton(
-                        onClick = { /*TODO*/ },
+                        onClick = { onAction(Action.OnSpeak) },
                         modifier = Modifier.background(
                             color = MaterialTheme.colorScheme.tertiary, shape = CircleShape
                         ), colors = IconButtonDefaults.iconButtonColors(

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iid.iiflashcards.data.model.CardEntity
 import com.iid.iiflashcards.data.repository.CardRepository
+import com.iid.iiflashcards.ui.helper.TTSHelper
 import com.iid.iiflashcards.util.ReviewDateHelper
 import com.iid.iiflashcards.util.ReviewDateHelper.Repetition.Again
 import com.iid.iiflashcards.util.ReviewDateHelper.Repetition.Easy
@@ -19,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DeckReviewViewModel @Inject constructor(
-    private val cardRepository: CardRepository
+    private val cardRepository: CardRepository,
+    private val ttsHelper: TTSHelper,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UIState())
@@ -50,7 +52,13 @@ class DeckReviewViewModel @Inject constructor(
             is Action.OnAgain -> onUpdateCardDate(Again)
             is Action.OnGood -> onUpdateCardDate(Good)
             is Action.OnHard -> onUpdateCardDate(Hard)
+            is Action.OnSpeak -> onSpeak()
         }
+    }
+
+    private fun onSpeak() = viewModelScope.launch {
+        val card = uiState.value.currentCard ?: return@launch
+        ttsHelper.speak(text = "${card.front}. ${card.frontHint}")
     }
 
     private fun onUpdateCardDate(repetition: ReviewDateHelper.Repetition) = viewModelScope.launch {
@@ -78,6 +86,12 @@ class DeckReviewViewModel @Inject constructor(
         cardRepository.refreshCards()
         _uiState.value = _uiState.value.copy(isRefreshing = false)
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        ttsHelper.stop()
+        ttsHelper.shutdown()
+    }
 }
 
 sealed class Action {
@@ -88,6 +102,7 @@ sealed class Action {
 
     data object OnReveal : Action()
     data object OnRefresh : Action()
+    data object OnSpeak : Action()
 }
 
 data class UIState(
