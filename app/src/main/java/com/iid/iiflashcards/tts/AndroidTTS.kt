@@ -88,7 +88,7 @@ class AndroidTTS @Inject constructor(
         // * @param queueMode Use TextToSpeech.QUEUE_FLUSH (default) to interrupt
         val queueMode: Int = TextToSpeech.QUEUE_FLUSH
         if (isInitialized && tts != null) {
-            tts?.setSpeechRate(0.75f)
+            setSpeechRate(0.75f)
             tts?.speak(text, queueMode, null, null)
         } else {
             tts = TextToSpeech(context, this)
@@ -114,6 +114,7 @@ class AndroidTTS @Inject constructor(
      * @param pitch Speech pitch. 1.0 is the normal pitch.
      * Lower values lower the pitch, higher values raise it.
      */
+    @Suppress("unused")
     fun setPitch(pitch: Float) {
         if (isInitialized) {
             tts?.setPitch(pitch)
