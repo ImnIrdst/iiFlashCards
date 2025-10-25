@@ -3,7 +3,7 @@ package com.iid.iiflashcards.di
 import android.content.Context
 import androidx.room.Room
 import com.iid.iiflashcards.data.local.AppDatabase
-import com.iid.iiflashcards.tts.GoogleCloudTTS
+import com.iid.iiflashcards.tts.AndroidTTS
 import com.iid.iiflashcards.tts.TTSHelper
 import dagger.Module
 import dagger.Provides
@@ -27,5 +27,5 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideTTs(googleCloudTTS: GoogleCloudTTS): TTSHelper = googleCloudTTS
+    fun provideTTs(ttsImpl: AndroidTTS): TTSHelper = ttsImpl
 }

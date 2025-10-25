@@ -72,7 +72,7 @@ class GoogleCloudTTS @Inject constructor(
         // * @param languageCode The language code (e.g., "en-US", "nl-NL").
         // * @param voiceName The gender of the voice (e.g., "Wavenet-A", "Neural2-A", "Neural2-B").
         val languageCode = "nl-NL"
-        val voiceName = "Wavenet-A"
+        val voiceName = "Wavenet-B"
 
         withContext(Dispatchers.IO) {
             initializeClient()
