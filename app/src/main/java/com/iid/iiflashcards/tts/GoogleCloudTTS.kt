@@ -1,4 +1,4 @@
-package com.iid.iiflashcards.ui.helper
+package com.iid.iiflashcards.tts
 
 import android.content.Context
 import android.media.AudioAttributes
@@ -13,13 +13,18 @@ import com.google.cloud.texttospeech.v1.TextToSpeechClient
 import com.google.cloud.texttospeech.v1.TextToSpeechSettings
 import com.google.cloud.texttospeech.v1.VoiceSelectionParams
 import com.iid.iiflashcards.R
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import javax.inject.Inject
 
-class TTSHelper(private val context: Context) {
+class GoogleCloudTTS @Inject constructor(
+    @param:ApplicationContext
+    private val context: Context
+) : TTSHelper {
     private var mediaPlayer: MediaPlayer? = null
     private var ttsClient: TextToSpeechClient? = null
 
@@ -57,15 +62,17 @@ class TTSHelper(private val context: Context) {
      * This method is a suspend function and should be called from a coroutine.
      *
      * @param text The text to be spoken.
-     * @param languageCode The language code (e.g., "en-US", "nl-NL").
-     * @param voiceName The gender of the voice (e.g., "Wavenet-A", "Neural2-A", "Neural2-B").
+
      */
-    suspend fun speak(
+    override suspend fun speak(
         text: String,
-        languageCode: String = "nl-NL",
-        voiceName: String = "Wavenet-A"
     ) {
         if (text.isBlank()) return
+
+        // * @param languageCode The language code (e.g., "en-US", "nl-NL").
+        // * @param voiceName The gender of the voice (e.g., "Wavenet-A", "Neural2-A", "Neural2-B").
+        val languageCode = "nl-NL"
+        val voiceName = "Wavenet-A"
 
         withContext(Dispatchers.IO) {
             initializeClient()
@@ -86,7 +93,7 @@ class TTSHelper(private val context: Context) {
             // Select the type of audio file to be returned
             val audioConfig = AudioConfig.newBuilder()
                 .setAudioEncoding(AudioEncoding.MP3)
-                .setSpeakingRate(0.5)
+                .setSpeakingRate(0.75)
                 .build()
 
             // Perform the text-to-speech request
@@ -172,5 +179,10 @@ class TTSHelper(private val context: Context) {
         stop()
         ttsClient?.shutdown()
         ttsClient = null
+    }
+
+    override fun clear() {
+        stop()
+        shutdown()
     }
 }

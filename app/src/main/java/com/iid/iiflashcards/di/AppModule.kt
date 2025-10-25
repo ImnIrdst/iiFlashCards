@@ -3,7 +3,8 @@ package com.iid.iiflashcards.di
 import android.content.Context
 import androidx.room.Room
 import com.iid.iiflashcards.data.local.AppDatabase
-import com.iid.iiflashcards.ui.helper.TTSHelper
+import com.iid.iiflashcards.tts.GoogleCloudTTS
+import com.iid.iiflashcards.tts.TTSHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,5 +26,6 @@ object AppModule {
     fun provideCardDao(database: AppDatabase) = database.cardDao()
 
     @Provides
-    fun provideTTs(@ApplicationContext context: Context) = TTSHelper(context)
+    @Singleton
+    fun provideTTs(googleCloudTTS: GoogleCloudTTS): TTSHelper = googleCloudTTS
 }

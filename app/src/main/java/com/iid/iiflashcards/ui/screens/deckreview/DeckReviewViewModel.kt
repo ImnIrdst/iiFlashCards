@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iid.iiflashcards.data.model.CardEntity
 import com.iid.iiflashcards.data.repository.CardRepository
-import com.iid.iiflashcards.ui.helper.TTSHelper
+import com.iid.iiflashcards.tts.TTSHelper
 import com.iid.iiflashcards.util.ReviewDateHelper
 import com.iid.iiflashcards.util.ReviewDateHelper.Repetition.Again
 import com.iid.iiflashcards.util.ReviewDateHelper.Repetition.Easy
@@ -88,9 +88,8 @@ class DeckReviewViewModel @Inject constructor(
     }
 
     override fun onCleared() {
+        ttsHelper.clear()
         super.onCleared()
-        ttsHelper.stop()
-        ttsHelper.shutdown()
     }
 }
 
