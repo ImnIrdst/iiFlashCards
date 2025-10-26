@@ -27,6 +27,9 @@ googleid = "1.1.1"
 playServicesAuth = "21.4.0"
 googleApiClient = "2.8.1"
 googleApiServicesSheets = "v4-rev516-1.23.0"
+mockitoCore = "5.10.0"
+mockitoKotlin = "5.2.1"
+kotlinxCoroutinesTest = "1.8.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -64,6 +67,9 @@ googleid = { group = "com.google.android.libraries.identity.googleid", name = "g
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
 google-api-client-android = { group = "com.google.api-client", name = "google-api-client-android", version.ref = "googleApiClient" }
 google-api-services-sheets = { group = "com.google.apis", name = "google-api-services-sheets", version.ref = "googleApiServicesSheets" }
+mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockitoCore" }
+mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockitoKotlin" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
