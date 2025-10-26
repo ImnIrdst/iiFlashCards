@@ -30,6 +30,7 @@ fun IIText(
 ) {
     val style = when (style) {
         IITextStyle.DisplayLarge -> MaterialTheme.typography.displayLarge
+        IITextStyle.DisplaySmall -> MaterialTheme.typography.displaySmall
         IITextStyle.HeadlineLarge -> MaterialTheme.typography.headlineLarge
         IITextStyle.HeadlineMedium -> MaterialTheme.typography.headlineMedium
         IITextStyle.HeadlineSmall -> MaterialTheme.typography.headlineSmall
@@ -62,6 +63,7 @@ sealed class Emphasis(
 
 sealed class IITextStyle {
     data object DisplayLarge : IITextStyle()
+    data object DisplaySmall : IITextStyle()
     data object HeadlineLarge : IITextStyle()
     data object TitleLarge : IITextStyle()
     data object TitleMedium : IITextStyle()

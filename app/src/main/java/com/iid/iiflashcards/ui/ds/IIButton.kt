@@ -3,6 +3,7 @@ package com.iid.iiflashcards.ui.ds
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -21,9 +22,10 @@ import com.iid.iiflashcards.ui.theme.extendedColorScheme
 @Composable
 fun IIButton(
     text: String,
+    modifier: Modifier = Modifier,
     subText: String? = null,
     style: IIButtonStyle = IIButtonStyle.Primary,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
 
     val buttonColors = when (style) {
@@ -37,8 +39,12 @@ fun IIButton(
         onClick = onClick,
         colors = buttonColors,
         shape = RoundedCornerShape(16.dp),
+        modifier = modifier,
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(8.dp)
+        ) {
             IIText(
                 text = text,
                 style = IITextStyle.LabelLarge,
@@ -69,14 +75,17 @@ fun IIButtonOutlined(
                 containerColor = MaterialTheme.extendedColorScheme.success.color,
                 contentColor = MaterialTheme.extendedColorScheme.success.colorContainer,
             )
+
             IIButtonOutLinedStyle.Info -> ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.extendedColorScheme.info.color,
                 contentColor = MaterialTheme.extendedColorScheme.info.colorContainer,
             )
+
             IIButtonOutLinedStyle.Warning -> ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.extendedColorScheme.warning.color,
                 contentColor = MaterialTheme.extendedColorScheme.warning.colorContainer,
             )
+
             IIButtonOutLinedStyle.Error -> ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.errorContainer,
                 contentColor = MaterialTheme.colorScheme.error,
@@ -134,11 +143,29 @@ private fun Preview() {
                 modifier = Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                IIButton(text = "Text") {}
+                IIButton(text = "Text", modifier = Modifier.fillMaxWidth()) {}
                 IIButton(text = "Text", subText = "subtext") {}
-                IIButtonOutlined(text = "Text", subText = "subtext", style = IIButtonOutLinedStyle.Success) {}
-                IIButtonOutlined(text = "Text", subText = "subtext", style = IIButtonOutLinedStyle.Info) {}
-                IIButtonOutlined(text = "Text", subText = "subtext", style = IIButtonOutLinedStyle.Warning) {}
-                IIButtonOutlined(text = "Text", subText = "subtext", style = IIButtonOutLinedStyle.Error) {}
+                IIButtonOutlined(
+                    text = "Text",
+                    subText = "subtext",
+                    style = IIButtonOutLinedStyle.Success
+                ) {}
+                IIButtonOutlined(
+                    text = "Text",
+                    subText = "subtext",
+                    style = IIButtonOutLinedStyle.Info
+                ) {}
+                IIButtonOutlined(
+                    text = "Text",
+                    subText = "subtext",
+                    style = IIButtonOutLinedStyle.Warning
+                ) {}
+                IIButtonOutlined(
+                    text = "Text",
+                    subText = "subtext",
+                    style = IIButtonOutLinedStyle.Error
+                ) {}
             }
         }
     }
