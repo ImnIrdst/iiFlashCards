@@ -1,10 +1,18 @@
 package com.iid.iiflashcards.util
 
+import androidx.annotation.VisibleForTesting
 import java.util.Calendar
 import java.util.Date
 
+
+@VisibleForTesting
+var currentTestDate: Date? = null
+
 fun getTomorrowDate(): Date {
     val calendar = Calendar.getInstance()
+    currentTestDate?.let {
+        calendar.time = it
+    }
     calendar.add(Calendar.DAY_OF_YEAR, 1)
     return calendar.time
 }
