@@ -2,16 +2,22 @@ package com.iid.iiflashcards.ui.screens.profile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.iid.iiflashcards.navigation.NavEvent
@@ -24,19 +30,30 @@ import com.iid.iiflashcards.ui.screens.signin.SignInViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun ProfileScreen(viewModel: SignInViewModel, onNavEvent: (NavEvent) -> Unit = {}) {
+fun ProfileScreen(signInViewModel: SignInViewModel, onNavEvent: (NavEvent) -> Unit = {}) {
     val lifecycleScope = LocalLifecycleOwner.current.lifecycleScope
+    val profileViewModel: ProfileViewModel = hiltViewModel()
+    val uiState by profileViewModel.uiState.collectAsState()
 
-    ProfileScreenContent(viewModel.getUser()) {
+    ProfileScreenContent(
+        uiState = uiState,
+        user = signInViewModel.getUser(),
+        doAction = profileViewModel::doAction,
+    ) {
         lifecycleScope.launch {
-            viewModel.signOut()
+            signInViewModel.signOut()
             onNavEvent(NavEvent.SignIn)
         }
     }
 }
 
 @Composable
-private fun ProfileScreenContent(user: UserData?, onSignOut: () -> Unit) {
+private fun ProfileScreenContent(
+    user: UserData?,
+    uiState: ProfileViewModel.UIState,
+    doAction: (ProfileViewModel.Action) -> Unit = {},
+    onSignOut: () -> Unit = {},
+) {
     IIScreen {
         Column(
             modifier = Modifier
@@ -49,6 +66,31 @@ private fun ProfileScreenContent(user: UserData?, onSignOut: () -> Unit) {
                 text = "Hello ${user?.username}!",
                 style = IITextStyle.DisplaySmall,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+            Spacer(modifier = Modifier.size(64.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                IIText(
+                    text = "Use cloud TTS",
+                    style = IITextStyle.TitleLarge,
+                    fontWeight = FontWeight.Bold,
+                )
+                Switch(
+                    checked = uiState.isCloudTTsEnabled,
+                    onCheckedChange = { doAction(ProfileViewModel.Action.ToggleCloudTTS) },
+                )
+            }
+
+            Spacer(modifier = Modifier.size(16.dp))
+            IIButton(
+                text = "Apply settings",
+                onClick = { /* implement reset tts helper instance */ },
+                modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.size(16.dp))
             IIButton(
@@ -68,6 +110,7 @@ private fun Preview() {
             userId = "1",
             username = "John Doe",
             profilePictureUrl = null
-        )
-    ) { }
+        ),
+        uiState = ProfileViewModel.UIState(isCloudTTsEnabled = true),
+    )
 }
