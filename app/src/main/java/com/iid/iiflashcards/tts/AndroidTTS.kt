@@ -4,6 +4,7 @@ import android.content.Context
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.delay
 import java.util.Locale
 import javax.inject.Inject
 
@@ -17,8 +18,7 @@ import javax.inject.Inject
  * @param initializationListener A listener to report initialization status.
  */
 class AndroidTTS @Inject constructor(
-    @param:ApplicationContext
-    val context: Context,
+    @param:ApplicationContext val context: Context,
 ) : TextToSpeech.OnInitListener, TTSHelper {
 
     /**
@@ -87,13 +87,12 @@ class AndroidTTS @Inject constructor(
     override suspend fun speak(text: String) {
         // * @param queueMode Use TextToSpeech.QUEUE_FLUSH (default) to interrupt
         val queueMode: Int = TextToSpeech.QUEUE_FLUSH
-        if (isInitialized && tts != null) {
-            setSpeechRate(0.75f)
-            tts?.speak(text, queueMode, null, null)
-        } else {
+        if (!isInitialized && tts == null) {
             tts = TextToSpeech(context, this)
-            Log.e("TtsHelper", "TTS is not initialized. Cannot speak.")
+            delay(1000)
         }
+        setSpeechRate(0.75f)
+        tts?.speak(text, queueMode, null, null)
     }
 
     /**

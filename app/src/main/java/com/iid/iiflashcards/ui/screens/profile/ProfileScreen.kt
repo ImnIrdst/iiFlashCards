@@ -85,13 +85,6 @@ private fun ProfileScreenContent(
                     onCheckedChange = { doAction(ProfileViewModel.Action.ToggleCloudTTS) },
                 )
             }
-
-            Spacer(modifier = Modifier.size(16.dp))
-            IIButton(
-                text = "Apply settings",
-                onClick = { /* implement reset tts helper instance */ },
-                modifier = Modifier.fillMaxWidth()
-            )
             Spacer(modifier = Modifier.size(16.dp))
             IIButton(
                 text = "Sign out",

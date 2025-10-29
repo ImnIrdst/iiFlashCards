@@ -7,6 +7,7 @@ import com.iid.iiflashcards.data.sharedpref.SettingsPreferences
 import com.iid.iiflashcards.tts.AndroidTTS
 import com.iid.iiflashcards.tts.GoogleCloudTTS
 import com.iid.iiflashcards.tts.TTSHelper
+import com.iid.iiflashcards.tts.TTSHelperImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,11 +32,7 @@ object AppModule {
     @Singleton
     fun provideTTs(
         localTTS: AndroidTTS,
-        cloudTTS: GoogleCloudTTS,
+        remoteTTS: GoogleCloudTTS,
         settingsPreferences: SettingsPreferences,
-    ): TTSHelper = if (settingsPreferences.isCloudTSSAgentEnabled()) {
-        cloudTTS
-    } else {
-        localTTS
-    }
+    ): TTSHelper = TTSHelperImpl(localTTS, remoteTTS, settingsPreferences)
 }
