@@ -1,6 +1,7 @@
 package com.iid.iiflashcards.ui.screens.deckreview
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -38,14 +40,20 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.iid.iiflashcards.navigation.NavEvent
@@ -59,6 +67,9 @@ import com.iid.iiflashcards.ui.ds.IIScreen
 import com.iid.iiflashcards.ui.ds.IIText
 import com.iid.iiflashcards.ui.ds.IITextStyle
 import com.iid.iiflashcards.ui.theme.IIFlashCardsTheme
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 
 @Composable
@@ -207,8 +218,34 @@ fun StatItem(count: Int, label: String, color: Color) {
 @Composable
 fun Flashcard(state: UIState, onAction: (Action) -> Unit) {
     val card = state.currentCard ?: return
+
+    val coroutineScope = rememberCoroutineScope()
+    val startOffset = previewOffset ?: LocalWindowInfo.current.containerSize.width.dp
+    val offsetX = remember { Animatable(startOffset.value) }
+
+    LaunchedEffect(card.front) {
+        delay(750)
+        offsetX.snapTo(startOffset.value)
+        offsetX.animateTo(
+            targetValue = 0f,
+            animationSpec = tween(durationMillis = 300)
+        )
+    }
+
+    fun animateAndPerformAction(action: Action) {
+        coroutineScope.launch {
+            offsetX.animateTo(
+                targetValue = -startOffset.value,
+                animationSpec = tween(durationMillis = 300)
+            )
+            onAction(action)
+        }
+    }
+
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .offset { IntOffset(offsetX.value.roundToInt(), 0) },
         shape = RoundedCornerShape(24.dp),
     ) {
         Column {
@@ -284,7 +321,8 @@ fun Flashcard(state: UIState, onAction: (Action) -> Unit) {
                     }
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(
-                            space = 4.dp, alignment = Alignment.CenterHorizontally
+                            space = 1.dp,
+                            alignment = Alignment.CenterHorizontally,
                         ),
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
@@ -292,16 +330,16 @@ fun Flashcard(state: UIState, onAction: (Action) -> Unit) {
                             .padding(vertical = 16.dp)
                     ) {
                         IIButtonOutlined(text = "Again", subText = "1m", style = Error) {
-                            onAction(Action.OnAgain)
+                            animateAndPerformAction(Action.OnAgain)
                         }
                         IIButtonOutlined(text = "Hard", subText = "10m", style = Warning) {
-                            onAction(Action.OnHard)
+                            animateAndPerformAction(Action.OnHard)
                         }
                         IIButtonOutlined(text = "Good", subText = "1d", style = Info) {
-                            onAction(Action.OnGood)
+                            animateAndPerformAction(Action.OnGood)
                         }
                         IIButtonOutlined(text = "Easy", subText = "4d", style = Success) {
-                            onAction(Action.OnEasy)
+                            animateAndPerformAction(Action.OnEasy)
                         }
                     }
                 }
@@ -349,9 +387,12 @@ fun DeckDetailFab(
     }
 }
 
+var previewOffset: Dp? = null
+
 @PreviewLightDark
 @Composable
 fun Preview() {
+    previewOffset = 0.dp
     IIFlashCardsTheme {
         DeckReviewScreenContent(
             uiState = UIState(
