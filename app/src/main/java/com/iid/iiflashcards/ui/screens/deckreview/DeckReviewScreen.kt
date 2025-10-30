@@ -24,8 +24,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Style
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.rounded.Person
@@ -48,6 +48,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -67,6 +68,7 @@ import com.iid.iiflashcards.ui.ds.IIScreen
 import com.iid.iiflashcards.ui.ds.IIText
 import com.iid.iiflashcards.ui.ds.IITextStyle
 import com.iid.iiflashcards.ui.theme.IIFlashCardsTheme
+import com.iid.iiflashcards.util.showNotImplementedToast
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -353,16 +355,17 @@ fun Flashcard(state: UIState, onAction: (Action) -> Unit) {
 fun DeckDetailFab(
     isExpanded: Boolean, onAction: (Action) -> Unit, onNavEvent: (NavEvent) -> Unit
 ) {
+    val context = LocalContext.current
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         FloatingActionButton(
-            onClick = { /*TODO*/ },
+            onClick = { context.showNotImplementedToast() },
             shape = RoundedCornerShape(16.dp),
             elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 4.dp)
         ) {
-            Icon(imageVector = Icons.Default.FavoriteBorder, contentDescription = "difficult")
+            Icon(imageVector = Icons.Default.Style, contentDescription = "difficult")
         }
         FloatingActionButton(
             onClick = { onAction(Action.OnReveal) },
