@@ -2,7 +2,7 @@ package com.iid.iiflashcards.ui.screens.addcard
 
 import com.iid.iiflashcards.data.model.CardEntity
 import com.iid.iiflashcards.data.repository.CardRepository
-import com.iid.iiflashcards.util.currentTestDate
+import com.iid.iiflashcards.util.DateHelperImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -29,13 +29,13 @@ class AddCardViewModelTest {
         Dispatchers.setMain(testDispatcher)
         cardRepository = mock()
         viewModel = AddCardViewModel(cardRepository)
-        currentTestDate = Date(1624137600000)
+        DateHelperImpl.currentTestDate = Date(1624137600000)
     }
 
     @After
     fun tearDown() {
         Dispatchers.resetMain()
-        currentTestDate = null
+        DateHelperImpl.currentTestDate = null
     }
 
     @Test

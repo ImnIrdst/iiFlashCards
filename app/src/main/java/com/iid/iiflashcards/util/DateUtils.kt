@@ -4,20 +4,16 @@ import androidx.annotation.VisibleForTesting
 import java.util.Calendar
 import java.util.Date
 
-
-@VisibleForTesting
-var currentTestDate: Date? = null
-
-fun getTomorrowDate(): Date {
-    val calendar = Calendar.getInstance()
-    currentTestDate?.let {
-        calendar.time = it
-    }
-    calendar.add(Calendar.DAY_OF_YEAR, 1)
-    return calendar.time
+interface DateHelper {
+    fun updateDate(date: Date, repetition: DateHelperImpl.Repetition): Date
+    fun getTomorrowDate(): Date
 }
 
-object ReviewDateHelper {
+object DateHelperImpl : DateHelper {
+
+    @VisibleForTesting
+    var currentTestDate: Date? = null
+
     sealed class Repetition(
         val p0: Int,
         val amount: Int,
@@ -28,10 +24,19 @@ object ReviewDateHelper {
         object Easy : Repetition(Calendar.DAY_OF_YEAR, 4)
     }
 
-    fun updateDate(date: Date, repetition: Repetition): Date {
+    override fun updateDate(date: Date, repetition: Repetition): Date {
         val calendar = Calendar.getInstance()
         calendar.time = date
         calendar.add(repetition.p0, repetition.amount)
+        return calendar.time
+    }
+
+    override fun getTomorrowDate(): Date {
+        val calendar = Calendar.getInstance()
+        currentTestDate?.let {
+            calendar.time = it
+        }
+        calendar.add(Calendar.DAY_OF_YEAR, 1)
         return calendar.time
     }
 }

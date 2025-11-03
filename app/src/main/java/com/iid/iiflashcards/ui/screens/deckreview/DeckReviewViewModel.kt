@@ -5,11 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.iid.iiflashcards.data.model.CardEntity
 import com.iid.iiflashcards.data.repository.CardRepository
 import com.iid.iiflashcards.tts.TTSHelper
-import com.iid.iiflashcards.util.ReviewDateHelper
-import com.iid.iiflashcards.util.ReviewDateHelper.Repetition.Again
-import com.iid.iiflashcards.util.ReviewDateHelper.Repetition.Easy
-import com.iid.iiflashcards.util.ReviewDateHelper.Repetition.Good
-import com.iid.iiflashcards.util.ReviewDateHelper.Repetition.Hard
+import com.iid.iiflashcards.util.DateHelperImpl
+import com.iid.iiflashcards.util.DateHelperImpl.Repetition.Again
+import com.iid.iiflashcards.util.DateHelperImpl.Repetition.Easy
+import com.iid.iiflashcards.util.DateHelperImpl.Repetition.Good
+import com.iid.iiflashcards.util.DateHelperImpl.Repetition.Hard
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -61,11 +61,11 @@ class DeckReviewViewModel @Inject constructor(
         ttsHelper.speak(text = "${card.front}. ${card.frontHint}")
     }
 
-    private fun onUpdateCardDate(repetition: ReviewDateHelper.Repetition) = viewModelScope.launch {
+    private fun onUpdateCardDate(repetition: DateHelperImpl.Repetition) = viewModelScope.launch {
         val currentCard = uiState.value.currentCard?.cardEntity ?: return@launch
 
         val newCard = currentCard.copy(
-            reviewDate = ReviewDateHelper.updateDate(currentCard.reviewDate, repetition)
+            reviewDate = DateHelperImpl.updateDate(currentCard.reviewDate, repetition)
         )
 
         cardRepository.updateCard(newCard)

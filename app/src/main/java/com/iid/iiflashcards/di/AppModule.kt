@@ -8,6 +8,8 @@ import com.iid.iiflashcards.tts.AndroidTTS
 import com.iid.iiflashcards.tts.GoogleCloudTTS
 import com.iid.iiflashcards.tts.TTSHelper
 import com.iid.iiflashcards.tts.TTSHelperImpl
+import com.iid.iiflashcards.util.DateHelper
+import com.iid.iiflashcards.util.DateHelperImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,4 +37,7 @@ object AppModule {
         remoteTTS: GoogleCloudTTS,
         settingsPreferences: SettingsPreferences,
     ): TTSHelper = TTSHelperImpl(localTTS, remoteTTS, settingsPreferences)
+
+    @Provides
+    fun provideDateHelper(): DateHelper = DateHelperImpl
 }

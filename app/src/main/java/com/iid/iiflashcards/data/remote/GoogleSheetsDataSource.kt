@@ -12,7 +12,7 @@ import com.iid.iiflashcards.data.local.converter.dateToLong
 import com.iid.iiflashcards.data.local.converter.longToDate
 import com.iid.iiflashcards.data.model.CardEntity
 import com.iid.iiflashcards.data.sharedpref.AccountPreferences
-import com.iid.iiflashcards.util.getTomorrowDate
+import com.iid.iiflashcards.util.DateHelper
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -23,6 +23,7 @@ class GoogleSheetsDataSource @Inject constructor(
     @param:ApplicationContext
     val context: Context,
     val accountPreferences: AccountPreferences,
+    val dateHelper: DateHelper,
 ) {
 
     private val spreadsheetId = "1FYAROmmL-fpISMaOkhBRA2cGG1KA1Y9PPqhptVAT1-4"
@@ -83,7 +84,7 @@ class GoogleSheetsDataSource @Inject constructor(
                     backHint = row[4].toString(),
                     reviewDate = longToDate(
                         value = row.getOrNull(5)?.toString()?.toLong()
-                    ) ?: getTomorrowDate()
+                    ) ?: dateHelper.getTomorrowDate()
                 )
             } else {
                 null
