@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.iid.iiflashcards.data.model.CardEntity
 import com.iid.iiflashcards.data.repository.CardRepository
 import com.iid.iiflashcards.tts.TTSHelper
+import com.iid.iiflashcards.util.DateHelper
 import com.iid.iiflashcards.util.DateHelperImpl
 import com.iid.iiflashcards.util.DateHelperImpl.Repetition.Again
 import com.iid.iiflashcards.util.DateHelperImpl.Repetition.Easy
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class DeckReviewViewModel @Inject constructor(
     private val cardRepository: CardRepository,
     private val ttsHelper: TTSHelper,
+    private val dateHelper: DateHelper,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UIState())
@@ -65,7 +67,7 @@ class DeckReviewViewModel @Inject constructor(
         val currentCard = uiState.value.currentCard?.cardEntity ?: return@launch
 
         val newCard = currentCard.copy(
-            reviewDate = DateHelperImpl.updateDate(currentCard.reviewDate, repetition)
+            reviewDate = dateHelper.updateDate(currentCard.reviewDate, repetition)
         )
 
         cardRepository.updateCard(newCard)

@@ -3,6 +3,7 @@ package com.iid.iiflashcards.data.repository
 import com.iid.iiflashcards.data.local.CardDao
 import com.iid.iiflashcards.data.model.CardEntity
 import com.iid.iiflashcards.data.remote.GoogleSheetsDataSource
+import com.iid.iiflashcards.util.DateHelper
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -13,21 +14,33 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import java.util.Date
 
 @ExperimentalCoroutinesApi
 class CardRepositoryTest {
 
     private lateinit var cardDao: CardDao
     private lateinit var remoteDataSource: GoogleSheetsDataSource
+    private lateinit var dateHelper: DateHelper
     private lateinit var cardRepository: CardRepository
 
+    private val testTomorrowDate = Date(1624137600000)
     private val testCard = CardEntity(id = 1, front = "front", back = "back")
+
+    private val testUpdatedCard = CardEntity(
+        id = 1,
+        front = "front",
+        back = "back",
+        reviewDate = testTomorrowDate,
+    )
 
     @Before
     fun setUp() {
         cardDao = mock()
         remoteDataSource = mock()
-        cardRepository = CardRepository(cardDao, remoteDataSource)
+        dateHelper = mock()
+        cardRepository = CardRepository(cardDao, remoteDataSource, dateHelper)
+        whenever(dateHelper.getTomorrowDate()).thenReturn(testTomorrowDate)
     }
 
     @Test
@@ -36,8 +49,8 @@ class CardRepositoryTest {
 
         cardRepository.saveCard(testCard)
 
-        verify(cardDao).insertCard(testCard)
-        verify(remoteDataSource).saveCards(listOf(testCard))
+        verify(cardDao).insertCard(testUpdatedCard)
+        verify(remoteDataSource).saveCards(listOf(testUpdatedCard))
     }
 
     @Test
@@ -46,8 +59,8 @@ class CardRepositoryTest {
 
         cardRepository.updateCard(testCard)
 
-        verify(cardDao).updateCard(testCard)
-        verify(remoteDataSource).saveCards(listOf(testCard))
+        verify(cardDao).updateCard(testUpdatedCard)
+        verify(remoteDataSource).saveCards(listOf(testUpdatedCard))
     }
 
     @Test
@@ -65,7 +78,7 @@ class CardRepositoryTest {
 
         val result = cardRepository.getAllCards()
 
-        assertEquals(listOf(testCard), result)
+        assertEquals(listOf(testUpdatedCard), result)
         verify(cardDao).getAllCards()
     }
 
@@ -77,7 +90,7 @@ class CardRepositoryTest {
         cardRepository.refreshCards()
 
         verify(remoteDataSource).getAllCards()
-        verify(cardDao).insertCards(listOf(testCard))
+        verify(cardDao).insertCards(listOf(testUpdatedCard))
     }
 
     @Test

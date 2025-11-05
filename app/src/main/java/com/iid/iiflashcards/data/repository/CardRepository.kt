@@ -14,8 +14,8 @@ class CardRepository @Inject constructor(
 ) {
 
     suspend fun saveCard(card: CardEntity) {
-        cardDao.insertCard(card)
-        remoteDataSource.saveCards(getAllCards())
+        cardDao.insertCard(card.fixDate())
+        remoteDataSource.saveCards(getAllCards().fixDates())
     }
 
     suspend fun updateCard(card: CardEntity?) {

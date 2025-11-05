@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "72cb81ebf880f55b9671d2757696dbcd",
+    "identityHash": "8af0959807791385cebbfe40b36fb009",
     "entities": [
       {
         "tableName": "cards",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `front` TEXT NOT NULL, `frontHint` TEXT, `back` TEXT NOT NULL, `backHint` TEXT, `reviewDate` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `front` TEXT NOT NULL, `frontHint` TEXT, `back` TEXT NOT NULL, `backHint` TEXT, `reviewDate` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -39,8 +39,7 @@
           {
             "fieldPath": "reviewDate",
             "columnName": "reviewDate",
-            "affinity": "INTEGER",
-            "notNull": true
+            "affinity": "INTEGER"
           }
         ],
         "primaryKey": {
@@ -53,7 +52,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '72cb81ebf880f55b9671d2757696dbcd')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8af0959807791385cebbfe40b36fb009')"
     ]
   }
 }
