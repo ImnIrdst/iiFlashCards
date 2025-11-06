@@ -24,8 +24,10 @@ object AppModule {
     @Provides
     @Singleton
     fun provideAppDatabase(@ApplicationContext context: Context) = Room.databaseBuilder(
-        context, AppDatabase::class.java, "flashcards-db",
-    ).build()
+        context,
+        AppDatabase::class.java,
+        "flashcards-db",
+    ).fallbackToDestructiveMigration(false).build()
 
     @Provides
     fun provideCardDao(database: AppDatabase) = database.cardDao()
