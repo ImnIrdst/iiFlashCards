@@ -27,6 +27,7 @@ class ProfileViewModel @Inject constructor(
     fun doAction(action: Action) {
         when (action) {
             is Action.ToggleCloudTTS -> toggleCloudTTS()
+            is Action.ToggleRevealCards -> toggleRevealCards()
         }
     }
 
@@ -37,11 +38,20 @@ class ProfileViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(isCloudTTsEnabled = !isCloudEnabled)
     }
 
+    private fun toggleRevealCards() {
+        val isRevealCardEnabled = _uiState.value.isRevealCardEnabled
+        settingsPreferences.setRevealCards(!isRevealCardEnabled)
+        settingsPreferences.clear()
+        _uiState.value = _uiState.value.copy(isRevealCardEnabled = !isRevealCardEnabled)
+    }
+
     data class UIState(
         val isCloudTTsEnabled: Boolean = false,
+        val isRevealCardEnabled: Boolean = false,
     )
 
     sealed class Action {
         object ToggleCloudTTS : Action()
+        object ToggleRevealCards : Action()
     }
 }

@@ -68,30 +68,47 @@ private fun ProfileScreenContent(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.size(64.dp))
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            ) {
-                IIText(
-                    text = "Use cloud TTS",
-                    style = IITextStyle.TitleLarge,
-                    fontWeight = FontWeight.Bold,
-                )
-                Switch(
-                    checked = uiState.isCloudTTsEnabled,
-                    onCheckedChange = { doAction(ProfileViewModel.Action.ToggleCloudTTS) },
-                )
-            }
-            Spacer(modifier = Modifier.size(16.dp))
+            SwitchRow(
+                title = "Use cloud TTS",
+                isEnabled = uiState.isCloudTTsEnabled
+            ) { doAction(ProfileViewModel.Action.ToggleCloudTTS) }
+            Spacer(modifier = Modifier.size(8.dp))
+            SwitchRow(
+                title = "Reveal cards by default",
+                isEnabled = uiState.isRevealCardEnabled
+            ) { doAction(ProfileViewModel.Action.ToggleRevealCards) }
+            Spacer(modifier = Modifier.size(32.dp))
             IIButton(
                 text = "Sign out",
                 onClick = onSignOut,
                 modifier = Modifier.fillMaxWidth()
             )
         }
+    }
+}
+
+@Composable
+private fun SwitchRow(
+    title: String,
+    isEnabled: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        IIText(
+            text = title,
+            style = IITextStyle.TitleLarge,
+            fontWeight = FontWeight.Bold,
+        )
+        Switch(
+            checked = isEnabled,
+            onCheckedChange = onCheckedChange,
+        )
     }
 }
 

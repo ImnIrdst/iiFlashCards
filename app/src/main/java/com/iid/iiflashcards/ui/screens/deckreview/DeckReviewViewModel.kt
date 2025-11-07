@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iid.iiflashcards.data.model.CardEntity
 import com.iid.iiflashcards.data.repository.CardRepository
+import com.iid.iiflashcards.data.sharedpref.SettingsPreferences
 import com.iid.iiflashcards.tts.TTSHelper
 import com.iid.iiflashcards.util.DateHelper
 import com.iid.iiflashcards.util.DateHelperImpl
@@ -24,10 +25,13 @@ class DeckReviewViewModel @Inject constructor(
     private val cardRepository: CardRepository,
     private val ttsHelper: TTSHelper,
     private val dateHelper: DateHelper,
+    settingsPreferences: SettingsPreferences,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UIState())
     val uiState: StateFlow<UIState> = _uiState
+
+    private val isRevealCardsEnabled = settingsPreferences.isRevealCardsEnabled()
 
     init {
         cardRepository.getAllCardsFlow().onEach { cards ->
@@ -39,6 +43,7 @@ class DeckReviewViewModel @Inject constructor(
                         back = it.back,
                         backHint = it.backHint ?: "...",
                         cardEntity = it,
+                        isExpanded = isRevealCardsEnabled,
                     )
                 }.sortedWith(UIState.comparator)
             )

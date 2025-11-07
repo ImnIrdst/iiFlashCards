@@ -13,6 +13,7 @@ class SettingsPreferences @Inject constructor(
     private companion object {
         const val PREFS_NAME = "settings_prefs"
         const val KEY_TSS_AGENT = "tss_agent"
+        const val KEY_REVEAL_CARDS = "reveal_cards"
     }
 
 
@@ -27,6 +28,15 @@ class SettingsPreferences @Inject constructor(
     }
 
     fun isCloudTSSAgentEnabled() = settingsPrefs.getBoolean(KEY_TSS_AGENT, false)
+
+    fun setRevealCards(isRevealed: Boolean) {
+        settingsPrefs.edit().apply {
+            putBoolean(KEY_TSS_AGENT, isRevealed)
+            apply()
+        }
+    }
+
+    fun isRevealCardsEnabled() = settingsPrefs.getBoolean(KEY_REVEAL_CARDS, false)
 
     @Suppress("unused")
     fun clear() {
